@@ -1,0 +1,1182 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.prayer-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:8px}.prayer-chip{min-height:44px;border:1px solid var(--line);border-radius:7px;background:var(--bg);font-size:.75rem;padding:3px 1px}.prayer-chip[aria-pressed="true"]{border-color:var(--ok);color:var(--ok);background:var(--surface)}.hadith-card{border-inline-start-color:var(--ok)}.hadith-card blockquote{margin:0;font-size:.94rem;line-height:1.9;font-weight:600}.hadith-card small{color:var(--muted);font-size:.76rem}.welcome .tabs,.welcome .bar,.welcome .views{display:none}.welcome-card{max-width:520px;margin:20px auto;text-align:center;padding:20px}.welcome-photo{position:relative;aspect-ratio:4/3;max-height:420px;overflow:hidden;border-radius:18px;background:linear-gradient(135deg,#1b2426,#8f301f);display:grid;place-items:center}.welcome-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}.photo-fallback{color:#fff;font-size:2rem;font-weight:800}.eyebrow{color:var(--accent);font-weight:700}.social-links{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:14px 0}.social-links a{border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink);text-decoration:none}.privacy-note{display:block;margin-top:10px}.link-btn{border:0;background:none;color:var(--muted);text-decoration:underline;font:inherit}.intention p{line-height:1.9}.rest-zikr{color:var(--muted);font-size:.85rem;padding-top:5px;text-align:center}.food-totals{padding:12px;background:var(--surface);border-radius:10px;margin:12px 0}.food-cal{display:flex;align-items:baseline;gap:8px}.food-cal b{font-size:2rem}.food-cal span,.food-macros{color:var(--muted)}.food-meter{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0}.food-meter i{display:block;height:100%;background:var(--accent);border-radius:8px}.food-macros{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.8rem}.meal-row{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:10px 0}.meal-info{display:grid;gap:3px;flex:1}.meal-info small{color:var(--muted)}.meal-photo{width:54px;height:54px;border-radius:8px;object-fit:cover}.fav-meals{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.fav-meals h3{width:100%}.food-tabs{display:flex;gap:6px}.meal-form .flds{margin-bottom:8px}.achievement-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:10px 0}.achievement-row div{display:grid;gap:3px}.achievement-row small{color:var(--muted)}</style></head><body>
+<title>دفتر التمرين | كريم سامي</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Cairo:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a gym logbook. Sticky day tabs on top, one card per exercise, rest timer docked at the bottom. */
+:root{
+  --bg:#E9ECEA; --surface:#F6F7F5; --ink:#15191C; --muted:#586671; --line:#C9D0CC;
+  --accent:#C8321A; --on-accent:#FFFFFF; --ok:#1E7A4C; --body:#D3D8D5; --muscle:#B6BEBA;
+  --f-disp:"Barlow Condensed","Cairo",system-ui,sans-serif;
+  --f-body:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1214; --surface:#181C1F; --ink:#ECEFEA; --muted:#9AA5AD; --line:#2A3034;
+    --accent:#FF6B3F; --on-accent:#14181B; --ok:#4CC38A; --body:#262C30; --muscle:#363D42; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1214; --surface:#181C1F; --ink:#ECEFEA; --muted:#9AA5AD; --line:#2A3034;
+  --accent:#FF6B3F; --on-accent:#14181B; --ok:#4CC38A; --body:#262C30; --muscle:#363D42; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.6;
+  padding-block:0 28px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+body.resting{padding-block-end:110px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.wrap{max-width:640px;margin-inline:auto}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:14px 10px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.brand h1{margin:0;font-size:1.35rem;font-weight:800;letter-spacing:0}
+.brand .date{font-size:.85rem;color:var(--muted)}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tab{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 4px;text-align:center;line-height:1.25;min-width:0}
+.tab b{display:block;font-size:.95rem;font-weight:800}
+.tab small{display:block;font-size:.72rem;color:var(--muted)}
+.tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.tab[aria-pressed="true"] small{color:inherit;opacity:.85}
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-top:10px}
+.seg{display:flex;gap:4px}
+.seg button{background:transparent;border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:.85rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);font-weight:600}
+.progress{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+.progress b{color:var(--ink)}
+
+.views{display:flex;gap:18px;margin-top:10px}
+.views button{background:none;border:0;border-bottom:2px solid transparent;padding:2px 0;font-weight:600;color:var(--muted)}
+.views button[aria-pressed="true"]{color:var(--ink);border-color:var(--accent)}
+
+main{display:flex;flex-direction:column;gap:14px;padding-top:16px}
+.banner{background:var(--surface);border:1px solid var(--line);border-inline-start:4px solid var(--accent);border-radius:6px;padding:10px 12px;font-size:.9rem}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.92rem}
+.switch{flex:none;width:44px;height:26px;border-radius:13px;border:1px solid var(--line);background:var(--bg);position:relative;padding:0}
+.switch::after{content:"";position:absolute;top:2px;inset-inline-start:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .15s}
+.switch[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+.switch[aria-pressed="true"]::after{background:var(--on-accent);transform:translateX(-18px)}
+
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.ex-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.ex-title{min-width:0}
+.ex h3{margin:0;font-family:var(--f-disp);font-size:1.6rem;line-height:1.1;font-weight:700;text-wrap:balance;direction:ltr;text-align:start;unicode-bidi:isolate}
+.ar{font-size:.98rem;font-weight:600;color:var(--muted);margin-top:2px}
+.tab.restday{border-style:dashed}
+.grp{margin:10px 0 0;font-size:1.05rem;font-weight:800}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.donebtn{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:6px;border:1px solid var(--line);background:var(--bg);font-weight:600}
+.donebtn svg{width:22px;height:22px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.donebtn[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.donebtn[aria-pressed="true"] svg{stroke:#fff}
+.target{margin:4px 0 0;font-size:.85rem;color:var(--muted)}
+.target b{font-family:var(--f-mono);font-weight:500;color:var(--ink)}
+.fig{flex:none;width:112px;margin:0}
+.fig svg{display:block;width:100%;height:auto}
+.fig .base{fill:var(--body)} .fig .m{fill:var(--muscle)} .fig .m.on{fill:var(--accent)}
+.fig text{font-family:var(--f-body);font-size:9px;fill:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 0;padding:0;list-style:none}
+.chips li{font-size:.72rem;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 6px;line-height:1.5}
+.cue{margin:0;font-size:.9rem}
+.last{font-size:.82rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.last .nums{font-family:var(--f-mono);direction:ltr;unicode-bidi:isolate}
+.up{background:var(--ok);color:#fff;border-radius:4px;padding:0 7px;font-weight:600;font-size:.78rem}
+:root[data-theme="dark"] .up{color:#08140E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .up{color:#08140E}}
+
+.sets{display:flex;flex-direction:column;gap:6px}
+.set{display:grid;grid-template-columns:34px minmax(0,1fr) 14px minmax(0,1fr) 46px;align-items:center;gap:6px}
+.set .n{font-family:var(--f-mono);font-size:.85rem;color:var(--muted);text-align:center}
+.set .x{text-align:center;color:var(--muted);font-family:var(--f-mono)}
+.set label{position:relative;display:block;min-width:0}
+.set input{width:100%;height:46px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;font-family:var(--f-mono);font-size:1.1rem;text-align:center;padding:0 24px 0 4px;direction:ltr}
+.set input::placeholder{color:var(--muted);opacity:.65}
+.set label span{position:absolute;inset-inline-end:6px;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--muted);pointer-events:none}
+.chk{height:46px;border-radius:6px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;padding:0}
+.chk svg{width:22px;height:22px;stroke:var(--muted);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.chk[aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.chk[aria-pressed="true"] svg{stroke:#fff}
+.set.done input{border-color:var(--ok)}
+.demo{align-self:flex-start;font-size:.85rem;color:var(--accent);text-underline-offset:3px}
+
+.savebar{display:flex;justify-content:center;padding-top:6px}
+.btn{background:var(--accent);color:var(--on-accent);border:0;border-radius:8px;padding:12px 28px;font-weight:800;font-size:1.05rem}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);padding:4px 12px;font-size:.82rem;font-weight:600}
+.btn.danger{color:var(--accent);border-color:var(--accent)}
+
+.sess{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.sess header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sess h3{margin:0;font-size:1.05rem;font-weight:800}
+.sess .d{font-size:.82rem;color:var(--muted)}
+.sess ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px;font-size:.88rem}
+.sess li{display:flex;justify-content:space-between;gap:12px}
+.sess li span:first-child{direction:ltr;unicode-bidi:isolate}
+.sess li span:last-child{font-family:var(--f-mono);direction:ltr;unicode-bidi:isolate;color:var(--muted);text-align:end}
+.empty{text-align:center;color:var(--muted);padding:36px 12px;border:1px dashed var(--line);border-radius:10px}
+
+.rest{position:fixed;inset:auto 0 0 0;z-index:25;background:var(--surface);border-top:2px solid var(--accent);padding:10px max(16px, env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-right,0px))}
+.rest-in{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:8px}
+.rest-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rest-time{font-family:var(--f-disp);font-weight:700;font-size:2.4rem;line-height:1;letter-spacing:.02em;direction:ltr}
+.rest-lbl{font-size:.85rem;color:var(--muted)}
+.rest-btns{display:flex;gap:6px}
+.track{height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:100%;background:var(--accent);transform-origin:right center}
+.toast{position:fixed;inset-inline:0;bottom:calc(90px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;pointer-events:none;z-index:40}
+.toast div{background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:8px;font-weight:600;font-size:.92rem}
+@media (prefers-reduced-motion:no-preference){.fill{transition:transform .25s linear}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h2{margin:0;font-size:1.12rem;font-weight:800;line-height:1.35}
+.card .sub{margin:0;font-size:.85rem;color:var(--muted)}
+.card .sub b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center;min-width:0}
+.kpi b{display:block;font-family:var(--f-mono);font-weight:500;font-size:1.15rem;direction:ltr;unicode-bidi:isolate}
+.kpi span{font-size:.72rem;color:var(--muted)}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wk div{border:1px solid var(--line);border-radius:6px;background:var(--bg);text-align:center;padding:6px 0 4px;font-size:.68rem;line-height:1.3;min-width:0}
+.wk div b{display:block;font-size:1rem;font-family:var(--f-mono);font-weight:500}
+.wk .done{border-color:var(--ok);color:var(--ok)}
+.wk .missed{border-color:var(--accent);color:var(--accent)}
+.wk .today{outline:2px solid var(--ink);outline-offset:1px}
+.wk .future{color:var(--muted)}
+.tasks{display:flex;flex-direction:column}
+.task{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
+.task:first-child{border-top:0}
+.task .tl{min-width:0}
+.task .tl small{display:block;color:var(--muted);font-size:.74rem}
+.qrow{display:flex;gap:6px;align-items:center}
+.qrow input{width:84px;height:40px}
+.note{border-inline-start-color:var(--muted)}
+.note.good{border-inline-start-color:var(--ok)}
+.note.warn{border-inline-start-color:var(--accent)}
+.flds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.flds.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--muted);min-width:0}
+.fld input,.fld select,.qrow input{height:44px;width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;font-family:var(--f-mono);font-size:1rem;padding:0 8px;text-align:center;direction:ltr}
+.fld select{font-family:var(--f-body);direction:rtl;text-align:start}
+.fld input[type="date"]{font-size:.9rem}
+.chart{display:block;width:100%;height:auto;direction:ltr}
+.ch-grid{stroke:var(--line);stroke-width:1;fill:none}
+.ch-t{fill:var(--muted);font-family:var(--f-mono);font-size:9px}
+.ch-lab{fill:var(--ink);font-family:var(--f-mono);font-size:10px;font-weight:500}
+.ch-line{fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.ch-dot{fill:var(--muted);fill-opacity:.7}
+.ch-end{fill:var(--accent)}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.tbl th,.tbl td{padding:5px 3px;border-top:1px solid var(--line);text-align:center;font-weight:500}
+.tbl th{color:var(--muted);font-size:.72rem;border-top:0}
+.tbl td{font-family:var(--f-mono);direction:ltr}
+.tbl td:first-child,.tbl th:first-child{text-align:start;font-family:var(--f-body)}
+.tbl .dl{display:block;font-size:.68rem;color:var(--muted)}
+.tbl .up2{color:var(--ok)}
+.rowbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.list{display:flex;flex-direction:column;gap:2px;font-size:.85rem;margin:0;padding:0;list-style:none}
+.list li{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.list li span:nth-child(2){font-family:var(--f-mono);direction:ltr}
+.badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.badge{border:1px solid var(--ok);border-radius:8px;padding:8px 10px;font-size:.82rem;line-height:1.35}
+.badge b{display:block;font-size:.9rem}
+.badge.off{border-color:var(--line);color:var(--muted)}
+.macro{display:flex;flex-direction:column;gap:10px}
+.macro .m1{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center}
+.macro .m1 b{font-family:var(--f-mono);font-weight:500;direction:ltr;text-align:end}
+.macro .bar2{grid-column:1/-1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.macro .bar2 i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.big{font-family:var(--f-disp);font-weight:700;font-size:3rem;line-height:1;direction:ltr;text-align:center}
+.shareimg{display:block;width:100%;max-width:300px;margin-inline:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.chk2{display:flex;align-items:center;gap:8px;font-size:.92rem}
+.chk2 input{width:20px;height:20px}
+.views{flex-wrap:wrap;gap:6px 14px}
+.views button{font-size:.92rem}
+body:not(.v-train) .tabs,body:not(.v-train) .bar{display:none}
+
+.views{flex-wrap:wrap;gap:6px 14px}
+body:not(.v-train) .tabs, body:not(.v-train) .bar{display:none}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><h1>دفتر التمرين</h1><span class="date" id="today"></span></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="bar">
+      <div class="seg" id="restseg" aria-label="مدة الراحة"></div>
+      <div class="progress" id="prog"></div>
+    </div>
+    <nav class="views" aria-label="العرض">
+      <button type="button" data-act="view" data-v="today" id="vo">الرئيسية</button>
+      <button type="button" data-act="view" data-v="train" id="vt">التمرين</button>
+      <button type="button" data-act="view" data-v="log" id="vl">السجل</button>
+      <button type="button" data-act="view" data-v="body" id="vb">الجسم</button>
+      <button type="button" data-act="view" data-v="food" id="vf">الأكل</button>
+      <button type="button" data-act="view" data-v="share" id="vs">الملخص</button>
+    </nav>
+  </header>
+  <main id="app"></main>
+</div>
+
+<div class="rest" id="rest" hidden>
+  <div class="rest-in">
+    <div class="rest-row">
+      <div><div class="rest-lbl" id="restlbl">راحة</div><div class="rest-time" id="resttime">2:30</div></div>
+      <div class="rest-btns">
+        <button type="button" class="btn ghost" data-act="rest-add" data-s="-15">−15</button>
+        <button type="button" class="btn ghost" data-act="rest-add" data-s="15">+15</button>
+        <button type="button" class="btn ghost" data-act="rest-skip">تخطي</button>
+      </div>
+    </div>
+    <div class="track"><div class="fill" id="restfill"></div></div><div class="rest-zikr" id="restzikr" aria-live="polite">وقت الراحة، خُد نفس واذكر الله لو تحب</div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden><div id="toastmsg"></div></div>
+
+<script>
+(function(){
+"use strict";
+document.documentElement.setAttribute("dir","rtl");
+document.documentElement.setAttribute("lang","ar");
+
+/* ---------- data ---------- */
+var MN = {chest:"صدر",delt_f:"كتف أمامي",delt_r:"كتف خلفي",biceps:"باي",triceps:"تراي",abs:"بطن",quads:"فخذ أمامي",hams:"فخذ خلفي",glutes:"جلوتس",calves:"سمانة",lats:"ظهر (لاتس)",upper_back:"ظهر علوي",forearms:"ساعد",traps:"ترابيس",lower_back:"أسفل الظهر"};
+
+var DAYS = [
+ {id:"d1",name:"صدر وضهر",wd:"الجمعة",dow:5,ex:[
+  {id:"fdbp",n:"Flat Dumbbell Bench Press",s:3,lo:6,hi:10,rt:"2–3 دقائق",rest:150,m:["chest","delt_f","triceps"],cue:"ده تمرين الضغط الأساسي للصدر في الأسبوع، نزّل الدمبل بتحكم وادفع لفوق.",q:"flat dumbbell bench press form"},
+  {id:"pullup",n:"Pull-Ups",s:2,lo:6,hi:10,rp:"حسب قدرتك",rest:120,m:["lats","biceps","upper_back"],cue:"ابدأ من التعليق بتحكم، واسحب بعضلات الضهر والدراعين، وانزل ببطء من غير تأرجح.",q:"pull up form"},
+  {id:"wgpd",n:"Wide-Grip Lat Pulldown",s:2,lo:6,hi:8,rt:"دقيقتين تقريبًا",rest:120,m:["lats","biceps","upper_back"],cue:"قبضة أوسع شوية من الكتفين، واسحب البار لأعلى الصدر ووجّه الكوعين لتحت.",q:"wide grip lat pulldown form"},
+  {id:"hilo",n:"High-to-Low Cable Crossover",s:2,lo:8,hi:12,rt:"60–90 ث",rest:75,m:["chest"],cue:"البكرات مرتفعة، واسحب الدراعين في مسار قوسي لتحت وقدام وثبّت الجذع.",q:"high to low cable crossover form"},
+  {id:"tbar",n:"T-Bar Row",s:2,lo:6,hi:8,rt:"2–3 دقائق",rest:150,m:["upper_back","lats","delt_r","lower_back"],cue:"ثبّت وضع الجسم قبل السحب، واسحب المقبض ناحية الجذع وانزل بتحكم.",q:"t bar row form"},
+  {id:"salp",n:"Single-Arm Cable Lat Pull",s:2,lo:12,hi:15,rt:"60–90 ث",rest:75,m:["lats"],cue:"2 مجموعات لكل دراع. اسحب الكوع ناحية جسمك وركّز على حركة الكتف والضهر.",q:"single arm cable lat pulldown form"},
+  {id:"pecdeck",n:"Pec Deck",s:2,lo:8,hi:12,rt:"60–90 ث",rest:75,m:["chest"],cue:"المقعد في مستوى مناسب للصدر. اجمع الدراعين بتحكم وارجع ببطء لحد ما تحس بتمدد في الصدر.",q:"pec deck fly form"}
+ ]},
+ {id:"d2",name:"دراع وكتف",wd:"السبت",dow:6,ex:[
+  {id:"dbsp",n:"Dumbbell Shoulder Press",s:2,lo:6,hi:10,m:["delt_f","triceps"],cue:"قاعد والضهر مسنود، ادفع الدمبلين لفوق من غير تقويس الضهر وانزل بتحكم لمستوى الودن.",q:"seated dumbbell shoulder press form"},
+  {id:"salr",n:"Single-Arm Cable Lateral Raise",s:2,lo:8,hi:12,u:true,m:["delt_f","delt_r"],cue:"2 مجموعات لكل دراع. قف بجانب الكابل وارفع الدراع في مسار مريح لحد مستوى الكتف.",q:"single arm cable lateral raise form"},
+  {id:"rpd",n:"Reverse Pec Deck",s:3,lo:8,hi:12,m:["delt_r","upper_back"],cue:"صدرك مقابل الوسادة، افتح الدراعين للجنب والخلف وثبّت الجذع.",q:"reverse pec deck form"},
+  {id:"sspd",n:"Straight-Bar Cable Pushdown",s:2,lo:8,hi:12,tag:"سوبر ست (أ)",m:["triceps"],cue:"اعمل التمرين ده وبعده على طول مد الحبل فوق الراس، وبعدين ارتاح 90–120 ث.",q:"straight bar triceps pushdown form"},
+  {id:"ssoh",n:"Overhead Rope Extension",s:2,lo:8,hi:12,tag:"سوبر ست (ب)",m:["triceps"],cue:"الكوعين لفوق وقريبين من الودن. بعد المجموعة ارتاح 90–120 ث وكرر.",q:"overhead cable rope triceps extension form"},
+  {id:"incurl",n:"Incline Dumbbell Curl",s:2,lo:6,hi:8,m:["biceps"],cue:"اضبط المقعد على ميل مناسب، وسيب الدراعين جنب الجسم وانزل ببطء. الأهم أداء نضيف وتقدم تدريجي.",q:"incline dumbbell curl form"},
+  {id:"hammer",n:"Dumbbell Hammer Curl",s:2,lo:10,hi:12,m:["biceps","forearms"],cue:"كفوف إيديك متقابلة، ثبّت الكتفين وانزل بتحكم.",q:"dumbbell hammer curl form"},
+  {id:"shrug",n:"Cable Shrug",s:2,lo:12,hi:15,m:["traps"],cue:"ارفع كتفيك لفوق بتحكم، وقّف لحظة فوق وانزل ببطء.",q:"cable shrug form"},
+  {id:"wrist",n:"Cable Wrist / Forearm",s:2,lo:10,hi:12,m:["forearms"],cue:"استخدم مقبض الكابل، وحركة الرسغ ثابتة ومسيطر عليها.",q:"cable wrist curl form"}
+ ]},
+{id:"r0",name:"راحة",wd:"الأحد",dow:0,rest:true,note:"يوم راحة كاملة. العضل بيتبني وانت بتتعافى، فالمطلوب النوم والأكل مش التمرين.",ex:[
+  {id:"sleep",n:"Sleep",ar:"نوم كفاية",d:"7–8 ساعات",tags:["تعافي"],cue:"نام بدري عشان تدخل تمرين الإثنين مرتاح."},
+  {id:"protein",n:"Protein",ar:"بروتين كفاية",d:"125–145 جم في اليوم",tags:["أكل"],cue:"وزّع البروتين على 3–4 وجبات، وكل نفس الكمية في أيام الراحة زي أيام التمرين."}
+ ]},
+ {id:"d3",name:"أمامي",wd:"الإثنين",dow:1,ex:[
+  {id:"incfly",n:"Incline Cable Fly",s:3,lo:8,hi:12,rt:"60–90 ث",rest:75,m:["chest","delt_f"],cue:"اضبط البكرات في مستوى منخفض، وحرك الدراعين لفوق وقدام في مسار قوسي قوي.",q:"incline cable fly form"},
+  {id:"legpress",n:"Leg Press",s:2,lo:8,hi:12,m:["quads","glutes"],leg:true,cue:"ضع القدمين على المنصة في وضع مريح وانزل بتحكم.",q:"leg press form"},
+  {id:"cdips",n:"Chest Dips (Machine)",s:2,lo:8,hi:12,rp:"12 أو حسب قدرتك",m:["chest","triceps","delt_f"],cue:"ميّل الجذع لقدام عشان تركز على الصدر، وانزل في مدى تتحكم فيه من غير ألم في الكتف. لو تقيل عليك استخدم جهاز المساعدة.",q:"chest dips machine form"},
+  {id:"legext",n:"Leg Extension",s:3,lo:10,hi:15,m:["quads"],leg:true,cue:"اضبط الجهاز بحيث محور الدوران يوافق الركبة، ارفع الوزن بمد الركبتين وقّف لحظة فوق وانزل بتحكم.",q:"leg extension form"},
+  {id:"preacher",n:"Machine Preacher Curl",s:2,lo:8,hi:12,m:["biceps"],cue:"الكوع قدام جسمك والدراع مسنودة على الوسادة، انزل لآخر مدى بتحكم وارفع من غير تأرجح.",q:"machine preacher curl form"},
+  {id:"msp",n:"Machine Shoulder Press",s:2,lo:8,hi:12,m:["delt_f","triceps"],cue:"اضبط المقعد بحيث المقابض في مستوى مناسب، وادفع لفوق من غير مبالغة في تقويس الضهر.",q:"machine shoulder press form"},
+  {id:"dlr",n:"Dumbbell Lateral Raise",s:2,lo:12,hi:15,m:["delt_f","delt_r"],cue:"ارفع الدمبلين للجنبين بوزن تتحكم فيه، وتجنب المرجحة وانزل ببطء.",q:"dumbbell lateral raise form"},
+  {id:"ccrunch",n:"Cable Crunch",s:3,lo:10,hi:15,rt:"60–90 ث",rest:75,m:["abs"],cue:"كرنش بالكابل بحركة محسوبة، والنفس مع الشد.",q:"cable crunch form"}
+ ]},
+{id:"r1",name:"كارديو",wd:"الثلاثاء",dow:2,rest:true,note:"كارديو خفيف يحافظ على لياقتك من غير ما يخصم من تمرين الأربعاء. ",ex:[
+  {id:"cardio",n:"Easy Cardio (Zone 2)",ar:"كارديو خفيف",d:"25–30 دقيقة",leg:true,tags:["قلب","لياقة"],cue:"مشي سريع أو جري هادي أو عجلة، بسرعة تقدر تتكلم معاها وانت بتعملها. ماتجريش بقوة قبل يوم الأربعاء.",q:"zone 2 cardio explained"},
+  {id:"upstretch",n:"Upper Body Cool-Down Stretch",ar:"تمدد خفيف للجسم العلوي",d:"5 دقايق",hold:30,tags:["صدر","كتف","ضهر"],cue:"صدر على الباب وكتف ولات، 30 ثانية لكل وضع من غير وجع.",q:"upper body stretching routine"}
+ ]},
+ {id:"d4",name:"خلفي",wd:"الأربعاء",dow:3,ex:[
+  {id:"crdf",n:"Cable Rear Delt Fly",s:2,lo:12,hi:15,rt:"60–90 ث",rest:75,m:["delt_r","upper_back"],cue:"افتح ذراعيك للخارج بتحكم من غير مرجحة أو تحريك الجذع.",q:"cable rear delt fly form"},
+  {id:"calf",n:"Calf Raise",s:3,lo:10,hi:15,rt:"60–90 ث",rest:75,m:["calves"],leg:true,cue:"اطلع لأعلى مدى مريح، اثبت لحظة وانزل ببطء.",q:"calf raise form"},
+  {id:"dbrdl",n:"Dumbbell Romanian Deadlift",s:2,lo:8,hi:12,rt:"2–3 دقائق",rest:150,m:["hams","glutes","lower_back"],leg:true,cue:"ادفع الحوض للخلف وخلي الدمبلين قريبين من رجليك، وركّز على ثبات الضهر.",q:"dumbbell romanian deadlift form"},
+  {id:"legcurl",n:"Lying Leg Curl",s:2,lo:10,hi:12,rt:"90 ث",rest:90,m:["hams"],leg:true,cue:"نايم على بطنك، اسحب الكعب ناحية المؤخرة وقّف لحظة وانزل ببطء. ده بيشغل الهامسترينج من غير تحميل على الضهر.",q:"lying leg curl form"},
+  {id:"wgsr",n:"Wide-Grip Seated Cable Row",s:2,lo:8,hi:12,rt:"90–120 ث",rest:105,m:["upper_back","lats","delt_r"],cue:"اسحب ناحية أعلى البطن ووجّه الكوعين للخارج نسبيًا، من غير مرجحة الجذع.",q:"wide grip seated cable row form"},
+  {id:"sapd",n:"Straight-Arm Cable Pulldown",s:2,lo:12,hi:15,rt:"60–90 ث",rest:75,m:["lats"],cue:"اسحب المقبض ناحية الفخذين مع ثبات بسيط في زاوية الكوع.",q:"straight arm cable pulldown form"},
+  {id:"sapush",n:"Single-Arm Cable Triceps Pushdown",s:2,lo:10,hi:15,u:true,rt:"60–90 ث",rest:75,m:["triceps"],cue:"2 مجموعات لكل دراع. ثبّت الكوع بجانب جسمك ومد الساعد لأسفل بتحكم.",q:"single arm cable triceps pushdown form"},
+  {id:"hipthrust",n:"Hip Thrust",s:2,lo:8,hi:12,rt:"90–120 ث",rest:105,m:["glutes","hams"],leg:true,cue:"ارفع الحوض بتحكم واعصر المؤخرة في الأعلى من غير تقويس في أسفل الضهر.",q:"hip thrust form"},
+  {id:"abduct",n:"Hip Abduction Machine",s:2,lo:12,hi:15,rt:"60 ث",rest:60,m:["glutes"],leg:true,cue:"قاعد وضهرك مسنود، افتح الفخدين للخارج بتحكم وارجع ببطء. بيشغل عضلات المؤخرة الجانبية اللي بتثبت الحوض.",q:"hip abduction machine form"},
+  {id:"birddog",n:"Bird Dog",s:2,lo:8,hi:10,u:true,us:" لكل ناحية",rt:"60 ث",rest:60,m:["lower_back","glutes","abs"],leg:true,cue:"على أربع، مد دراع ورجل من الناحيتين المتعاكستين وثبّت الضهر محايد، وقّف 2–3 ثواني. 2 مجموعات لكل ناحية.",q:"bird dog exercise form"},
+  {id:"pallof",n:"Cable Pallof Press",s:2,lo:10,hi:12,u:true,us:" لكل ناحية",m:["abs"],cue:"الكابل على جنبك، ادفع المقبض قدامك وامنع الجسم من الدوران، وثبّت 1–2 ثانية. 2 مجموعات لكل ناحية.",q:"pallof press form"}
+ ]},
+{id:"r2",name:"مرونة وبطن",wd:"الخميس",dow:4,rest:true,note:"حوالي 25 دقيقة: مرونة ثم بطن في البيت. حركات بطيئة من غير وجع. مفيش سيت أب ولا رفع رجل بحمل بسبب الانزلاق الغضروفي.",ex:[
+  {id:"catcow",g:"مرونة (15 دقيقة)",n:"Cat-Cow",ar:"القطة والجمل",d:"10 تكرارات بطيئة",leg:true,tags:["عمود فقري"],cue:"على أربع، قوّس الضهر لفوق ثم نزّله لتحت بالراحة مع النفس. حركة صغيرة من غير ألم.",q:"cat cow stretch"},
+  {id:"openbook",g:"مرونة (15 دقيقة)",n:"Open Book",ar:"فتح الصدر والضهر العلوي",d:"8 تكرارات لكل ناحية",leg:true,tags:["ضهر علوي","صدر"],cue:"نايم على جنبك وركبتينك مثنيتين، افتح دراعك العلوي لبرا ولف صدرك وارجع.",q:"open book thoracic rotation"},
+  {id:"chestst",g:"مرونة (15 دقيقة)",n:"Doorway Chest Stretch",ar:"تمدد الصدر على الباب",d:"2 × 30 ث",hold:30,tags:["صدر","كتف أمامي"],cue:"الكوع على حافة الباب بزاوية 90 درجة وتقدم بخطوة لحد ما تحس بالشد.",q:"doorway chest stretch"},
+  {id:"crossst",g:"مرونة (15 دقيقة)",n:"Cross-Body Shoulder Stretch",ar:"تمدد الكتف الخلفي",d:"30 ث لكل دراع",hold:30,tags:["كتف خلفي"],cue:"اسحب الدراع قدام صدرك بالدراع التانية وثبّت.",q:"cross body shoulder stretch"},
+  {id:"tristr",g:"مرونة (15 دقيقة)",n:"Overhead Triceps Stretch",ar:"تمدد الترايسبس",d:"30 ث لكل دراع",hold:30,tags:["تراي"],cue:"الكوع فوق الراس والإيد ورا ضهرك، واسحب الكوع بالإيد التانية.",q:"overhead triceps stretch"},
+  {id:"latst",g:"مرونة (15 دقيقة)",n:"Lat Stretch",ar:"تمدد اللات",d:"30 ث لكل ناحية",hold:30,tags:["ضهر"],cue:"امسك حافة الباب وادفع الحوض لورا لحد ما تحس بالشد على جنبك.",q:"lat stretch"},
+  {id:"forest",g:"مرونة (15 دقيقة)",n:"Forearm Stretch",ar:"تمدد الساعد",d:"30 ث لكل ناحية",hold:30,tags:["ساعد"],cue:"الدراع مفرود قدامك وكف إيدك لقدام، واسحب الأصابع للخلف بالإيد التانية.",q:"forearm stretch"},
+  {id:"hipfl",g:"مرونة (15 دقيقة)",n:"Half-Kneeling Hip Flexor Stretch",ar:"تمدد مقدمة الحوض",d:"30 ث لكل رجل",hold:30,leg:true,tags:["حوض","فخذ أمامي"],cue:"ركبة على الأرض، اعصر المؤخرة وادفع الحوض لقدام شوية من غير ما تقوّس أسفل الضهر.",q:"half kneeling hip flexor stretch"},
+  {id:"hamst",g:"مرونة (15 دقيقة)",n:"Lying Hamstring Stretch",ar:"تمدد الفخذ الخلفي نايم",d:"30 ث لكل رجل",hold:30,leg:true,tags:["هامسترينج"],cue:"نايم على ضهرك، شد الرجل بحبل أو فوطة ناحيتك والركبة مثنية شوية. وقّف لو حسيت بشد في الضهر.",q:"lying hamstring stretch with strap"},
+  {id:"fig4",g:"مرونة (15 دقيقة)",n:"Figure-4 Glute Stretch",ar:"تمدد المؤخرة (رقم 4)",d:"30 ث لكل رجل",hold:30,leg:true,tags:["مؤخرة"],cue:"نايم على ضهرك، حط كاحل رجل على ركبة الرجل التانية واسحب الفخذ ناحيتك.",q:"figure 4 glute stretch"},
+  {id:"calfst2",g:"مرونة (15 دقيقة)",n:"Wall Calf Stretch",ar:"تمدد السمانة",d:"30 ث لكل رجل",hold:30,leg:true,tags:["سمانة"],cue:"إيديك على الحيطة، رجل ورا والكعب على الأرض.",q:"wall calf stretch"},
+  {id:"deadbug",g:"بطن في البيت (10 دقايق)",n:"Dead Bug",ar:"الحشرة الميتة",d:"2 × 8 لكل ناحية",leg:true,tags:["بطن"],cue:"نايم على ضهرك، ثبّت أسفل الضهر على الأرض، مد دراع ورجل متعاكسين ببطء وارجع.",q:"dead bug exercise"},
+  {id:"plank",g:"بطن في البيت (10 دقايق)",n:"Plank",ar:"بلانك",d:"2 × 30–45 ث",hold:40,leg:true,tags:["بطن","كور"],cue:"جسمك خط مستقيم من الكتف للكعب. شد البطن والمؤخرة وماتخليش الحوض يوطّي.",q:"plank form"},
+  {id:"sideplank",g:"بطن في البيت (10 دقايق)",n:"Side Plank",ar:"بلانك جانبي",d:"2 × 20–30 ث لكل ناحية",hold:25,leg:true,tags:["بطن جانبي","كور"],cue:"على كوعك وجسمك خط مستقيم، ارفع الحوض وثبّت من غير ما يميل لقدام أو ورا.",q:"side plank form"}
+ ]}
+];
+var AR = {fdbp:"ضغط صدر مستوي بالدمبل",hilo:"تفتيح كابل من أعلى لأسفل",pecdeck:"جهاز تفتيح الصدر (بيك دك)",pullup:"العقلة",wgpd:"سحب أمامي بقبضة واسعة",tbar:"تجديف تي-بار",salp:"سحب لات بالكابل بذراع واحدة",
+salr:"رفرفة جانبية بالكابل بذراع واحدة",bayes:"باي بالكابل (بايزيان)",rpd:"جهاز الكتف الخلفي",sspd:"دفع ترايسبس بالبار المستقيم",ssoh:"مد ترايسبس بالحبل فوق الراس",incurl:"باي بالدمبل على بنش مائل",hammer:"هامر كيرل بالدمبل",shrug:"هز الكتفين بالكابل",wrist:"تمرين الساعد بالكابل",
+incfly:"تفتيح صدر بالكابل من أسفل لأعلى",cdips:"متوازي للصدر",legext:"مد الرجل على الجهاز (فخذ أمامي)",msp:"ضغط كتف على الجهاز",dlr:"رفرفة جانبية بالدمبل",legpress:"ضغط الرجل",
+crdf:"رفرفة كتف خلفي بالكابل",calf:"تمرين السمانة",dbrdl:"رفعة رومانية بالدمبل",wgsr:"تجديف كابل بقبضة واسعة",sapd:"سحب لات بذراعين شبه مستقيمين",ccrunch:"كرنش بطن بالكابل",sapush:"دفع ترايسبس بالكابل بذراع واحدة",hipthrust:"دفع الحوض",preacher:"باي على جهاز البريتشر",birddog:"بيرد دوج (تقوية الكور والقطنية)",pallof:"بالوف برس بالكابل (ثبات الكور)",dbsp:"ضغط كتف بالدمبل",legcurl:"ثني الرجل نايم على البطن (هامسترينج)",abduct:"جهاز إبعاد الفخدين (مؤخرة جانبية)"};
+var RESTS = [90,120,150,180];
+
+/* ---------- state ---------- */
+var LS = "dafter-tamreen-kareem-v2";
+var S = {v:2,t:0,sessions:[],draft:{},prefs:{day:0,rest:150},prayers:{}};
+try{ var raw = localStorage.getItem(LS); if(raw){ var o = JSON.parse(raw); if(o && o.sessions){ S = o; } } }catch(e){}
+S.prefs = S.prefs || {day:0,rest:150}; S.prayers = S.prayers || {};
+S.draft = S.draft || {};
+function defaults(){
+  S.weights = S.weights || {}; S.meas = S.meas || []; S.habits = S.habits || {}; S.prayers = S.prayers || {};
+  S.profile = S.profile || {}; var p = S.profile;
+  if(!p.goal) p.goal = "gain"; if(!p.act) p.act = 1.55;
+  delete p.cast; if(p.h===undefined) p.h = ""; if(p.age===undefined) p.age = ""; if(p.w===undefined) p.w = "";
+  S.share = S.share || {name:"",weight:false}; if(S.share.weight===undefined) S.share.weight=false; S.food=S.food||{days:{},favorites:[]};
+}
+defaults();
+var view = "today";
+var dayIdx = 0;
+var restToday = false, startIdx = 0;
+(function(){
+  var today = new Date().getDay(), f = -1, off = 0;
+  for(off=0; off<7 && f<0; off++){
+    var dw = (today+off)%7;
+    for(var i=0;i<DAYS.length;i++){ if(DAYS[i].dow===dw){ f=i; break; } }
+    if(f>=0) break;
+  }
+  restToday = off>0; startIdx = f>=0 ? f : 0; dayIdx = startIdx;
+})();
+var cloudTimer = null;
+
+var cloudDb = null, cloudUid = null, written = {};
+function monthOf(s){ return String(s.date).slice(0,7); }
+function splitState(){
+  var rest = {}; Object.keys(S).forEach(function(k){ if(k!=="sessions") rest[k] = S[k]; });
+  var months = {}; S.sessions.forEach(function(s){ (months[monthOf(s)] = months[monthOf(s)] || []).push(s); });
+  return {rest:rest, months:months};
+}
+function cloudPush(force){
+  if(!cloudDb) return;
+  var sp = splitState(), ops = [], keys = Object.keys(sp.months);
+  Object.keys(written).forEach(function(m){ if(keys.indexOf(m)<0 && written[m]!=="[]") keys.push(m); });
+  keys.forEach(function(m){
+    var j = JSON.stringify(sp.months[m] || []);
+    if(force || written[m]!==j){
+      ops.push(cloudDb.doc("data/users/"+cloudUid+"/sess-"+m).set({t:S.t, json:j}).then(function(){ written[m] = j; }));
+    }
+  });
+  Promise.all(ops).then(function(){
+    return cloudDb.doc("data/users/"+cloudUid+"/state").set({t:S.t, json:JSON.stringify(sp.rest), v:2});
+  }).catch(function(){});
+}
+function persist(){
+  S.t = Date.now();
+  try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){}
+  if(cloudDb){
+    clearTimeout(cloudTimer);
+    cloudTimer = setTimeout(function(){ cloudPush(false); }, 700);
+  }
+}
+function adopt(o){
+  if(!o || !o.sessions) return;
+  S = o; S.prefs = S.prefs || {day:0,rest:150}; delete S.prefs.legSafe; S.prayers=S.prayers||{}; S.draft = S.draft || {}; defaults();
+  try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){}
+  renderAll();
+}
+function initCloud(){
+  if(!(window.claude && claude.use)) return;
+  Promise.all([claude.use("db"), claude.use("user")]).then(function(r){
+    var db = r[0], user = r[1];
+    if(!db || !user) return null;
+    return user.id().then(function(id){
+      cloudDb = db; cloudUid = id;
+      return db.doc("data/users/"+id+"/state").get();
+    });
+  }).then(function(snap){
+    if(!cloudDb) return;
+    var d = snap && snap.exists ? snap.data() : null;
+    if(d && d.json && d.t > (S.t||0)){
+      var o = JSON.parse(d.json);
+      if(o.sessions){ adopt(o); return; }
+      return cloudDb.collection("data/users/"+cloudUid).get().then(function(q){
+        var all = [];
+        q.docs.forEach(function(x){
+          if(x.id.indexOf("sess-")!==0) return;
+          var dd = x.data(); if(!dd || !dd.json) return;
+          written[x.id.slice(5)] = dd.json;
+          try{ all = all.concat(JSON.parse(dd.json)); }catch(e){}
+        });
+        all.sort(function(a,b){ return a.date<b.date?1:a.date>b.date?-1:b.id-a.id; });
+        o.sessions = all; adopt(o);
+      });
+    } else if(S.sessions.length || Object.keys(S.draft).length || Object.keys(S.weights).length){
+      cloudPush(true);
+    }
+  }).catch(function(){});
+}
+
+/* ---------- helpers ---------- */
+function $(id){ return document.getElementById(id); }
+function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+function fmtDate(k){ var p=k.split("-"); var d=new Date(+p[0],+p[1]-1,+p[2]); return d.toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long"}); }
+function dayOf(id){ for(var i=0;i<DAYS.length;i++) if(DAYS[i].id===id) return DAYS[i]; return null; }
+function draftFor(day){
+  var d = S.draft[day.id] = S.draft[day.id] || {};
+  if(day.rest) return d;
+  day.ex.forEach(function(e){
+    var a = d[e.id] = d[e.id] || [];
+    while(a.length < e.s) a.push({w:"",r:"",d:false});
+  });
+  return d;
+}
+function lastFor(exId){
+  for(var i=0;i<S.sessions.length;i++){
+    var s = S.sessions[i];
+    if(s.sets && s.sets[exId] && s.sets[exId].length) return {date:s.date, sets:s.sets[exId]};
+  }
+  return null;
+}
+function bestW(exId){
+  var b = 0;
+  S.sessions.forEach(function(s){ (s.sets[exId]||[]).forEach(function(x){ if(x.w>b) b=x.w; }); });
+  return b;
+}
+function visibleEx(day){ return day.ex; }
+function toast(msg){
+  $("toastmsg").textContent = msg; $("toast").hidden = false;
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ $("toast").hidden = true; }, 2200);
+}
+function mmss(s){ s=Math.max(0,s); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }
+
+/* ---------- muscle figure ---------- */
+function fig(on){
+  function m(k,els){ return '<g class="m'+(on.indexOf(k)>-1?' on':'')+'">'+els+'</g>'; }
+  function el(cx,cy,rx,ry){ return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'"/>'; }
+  function pair(cx,cy,rx,ry){ return el(cx,cy,rx,ry)+el(100-cx,cy,rx,ry); }
+  var base = '<g class="base"><circle cx="50" cy="14" r="9"/><rect x="30" y="27" width="40" height="66" rx="12"/><rect x="13" y="34" width="13" height="58" rx="6"/><rect x="74" y="34" width="13" height="58" rx="6"/><rect x="33" y="90" width="16" height="108" rx="7"/><rect x="51" y="90" width="16" height="108" rx="7"/></g>';
+  var front = base + m("delt_f",pair(26,40,8,7)) + m("chest",pair(41,52,9,8)) + m("biceps",pair(19.5,58,5,11)) + m("abs",el(50,76,8,15)) + m("forearms",pair(19.5,81,4.5,9)) + m("quads",pair(41,128,7.5,24)) + m("calves",pair(41,173,6,17));
+  var back = base + m("traps",el(50,39,12,8)) + m("delt_r",pair(26,40,8,7)) + m("upper_back",el(50,55,8,8)) + m("lats",pair(39,70,8,13)) + m("lower_back",el(50,87,8,6)) + m("triceps",pair(19.5,58,5,11)) + m("forearms",pair(19.5,81,4.5,9)) + m("glutes",pair(42,102,8.5,8)) + m("hams",pair(41,137,7.5,21)) + m("calves",pair(41,173,6,17));
+  return '<svg viewBox="0 0 224 212" role="img" aria-label="العضلات المستهدفة"><g transform="translate(0,0)">'+front+'<text x="50" y="209" text-anchor="middle">أمام</text></g><g transform="translate(124,0)">'+back+'<text x="50" y="209" text-anchor="middle">خلف</text></g></svg>';
+}
+
+/* ---------- render ---------- */
+var CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function renderTabs(){
+  $("tabs").innerHTML = DAYS.map(function(d,i){
+    return '<button type="button" class="tab'+(d.rest?' restday':'')+'" data-act="day" data-i="'+i+'" aria-pressed="'+(i===dayIdx)+'"><b>'+d.name+'</b><small>'+d.wd+'</small></button>';
+  }).join("");
+  $("restseg").innerHTML = '<span class="progress" style="align-self:center;margin-inline-end:4px;white-space:nowrap">الراحة</span>' + RESTS.map(function(s){
+    return '<button type="button" data-act="rest" data-s="'+s+'" aria-pressed="'+(S.prefs.rest===s)+'">'+mmss(s)+'</button>';
+  }).join("");
+  $("vt").setAttribute("aria-pressed", view==="train");
+  $("vl").setAttribute("aria-pressed", view==="log");
+}
+
+function updateProgress(){
+  var day = DAYS[dayIdx], d = draftFor(day), done = 0, tot = 0;
+  if(day.rest){ visibleEx(day).forEach(function(e){ tot++; if(d[e.id]) done++; }); }
+  else { visibleEx(day).forEach(function(e){ d[e.id].forEach(function(x){ tot++; if(x.d) done++; }); }); }
+  $("prog").innerHTML = view==="train" ? '<b>'+done+'</b> / '+tot+(day.rest?' مهمة':' مجموعة') : S.sessions.length+' تمرين محفوظ';
+}
+
+function renderTrain(){
+  var day = DAYS[dayIdx], d = draftFor(day), h = [];
+  if(restToday && dayIdx===startIdx) h.push('<div class="banner">النهارده يوم راحة. التمرين الجاي: <b>'+day.name+'</b> يوم '+day.wd+'.</div>');
+  if(day.rest){ renderRestDay(day, d, h); $("app").innerHTML = h.join(""); return; }
+  h.push('<section class="card intention"><p class="sub">قبل ما تبدأ · خُد نيتك</p><p>اللهم إني أنوي بهذا التمرين أن أتقوّى على طاعتك، وأحافظ على نعمة الصحة، وأبتعد عن الكسل، وأكون قدوة حسنة وأشجّع غيري.</p><button type="button" class="btn ghost" data-act="intention-start">بسم الله، أبدأ التمرين</button></section>');
+  visibleEx(day).forEach(function(e){
+    var last = lastFor(e.id), best = bestW(e.id), lastHtml = "";
+    var up = false;
+    if(last){
+      up = last.sets.every(function(x){ return x.w>0 && x.r>=e.hi; });
+      lastHtml = '<div class="last"><span>آخر مرة</span><span class="nums">'+last.sets.map(function(x){ return (x.w||0)+'×'+(x.r||0); }).join(' · ')+'</span>'+(best?'<span>الأعلى: <span class="nums">'+best+' kg</span></span>':'')+(up?'<span class="up">زوّد الوزن</span>':'')+'</div>';
+    } else {
+      lastHtml = '<div class="last"><span>أول مرة للتمرين ده. ابدأ بوزن تقدر تعمل بيه أعلى تكرارات المدى وتساوي ساب تكرار أو اتنين.</span></div>';
+    }
+    var rows = d[e.id].map(function(x,i){
+      var lw = last && last.sets[i] ? last.sets[i].w : (last && last.sets[0] ? last.sets[0].w : "");
+      return '<div class="set'+(x.d?' done':'')+'" data-row="'+e.id+':'+i+'">'+
+        '<span class="n">'+(i+1)+'</span>'+
+        '<label><input type="text" inputmode="decimal" id="w-'+e.id+'-'+i+'" data-ex="'+e.id+'" data-i="'+i+'" data-f="w" value="'+(x.w===""?"":x.w)+'" placeholder="'+(lw||"وزن")+'" aria-label="وزن المجموعة '+(i+1)+'"><span>kg</span></label>'+
+        '<span class="x">×</span>'+
+        '<label><input type="text" inputmode="numeric" id="r-'+e.id+'-'+i+'" data-ex="'+e.id+'" data-i="'+i+'" data-f="r" value="'+(x.r===""?"":x.r)+'" placeholder="'+e.lo+'-'+e.hi+'" aria-label="تكرارات المجموعة '+(i+1)+'"><span>rep</span></label>'+
+        '<button type="button" class="chk" data-act="check" data-ex="'+e.id+'" data-i="'+i+'" aria-pressed="'+!!x.d+'" aria-label="تم المجموعة '+(i+1)+'">'+CHECK+'</button>'+
+      '</div>';
+    }).join("");
+    h.push('<article class="ex">'+
+      '<div class="ex-head"><div class="ex-title"><h3>'+e.n+'</h3><div class="ar">'+(AR[e.id]||'')+'</div><p class="target"><b>'+e.s+' × '+(e.rp||(e.lo+'–'+e.hi))+'</b>'+(e.u?(e.us||' لكل دراع'):'')+' · '+(e.rt?'راحة '+e.rt:'قريب من الفشل')+'</p>'+
+      '<ul class="chips">'+(e.tag?'<li>'+e.tag+'</li>':'')+e.m.map(function(k){ return '<li>'+MN[k]+'</li>'; }).join("")+'</ul></div>'+
+      '<figure class="fig">'+fig(e.m)+'</figure></div>'+
+      '<p class="cue">'+e.cue+'</p>'+(e.warn?'<div class="banner">'+e.warn+'</div>':'')+lastHtml+
+      '<div class="sets">'+rows+'</div>'+
+      '<a class="demo" href="https://www.youtube.com/results?search_query='+encodeURIComponent(e.q)+'" target="_blank" rel="noopener">شاهد الأداء الصحيح على يوتيوب</a>'+
+    '</article>');
+  });
+  h.push('<div class="savebar"><button type="button" class="btn" data-act="save">حفظ تمرين اليوم</button></div>');
+  $("app").innerHTML = h.join("");
+}
+
+function renderRestDay(day, d, h){
+  h.push('<div class="banner">'+day.note+'</div>');
+  var lastG = null;
+  visibleEx(day).forEach(function(e){
+    if(e.g && e.g!==lastG){ h.push('<h2 class="grp">'+e.g+'</h2>'); lastG = e.g; }
+    var on = !!d[e.id];
+    h.push('<article class="ex">'+
+      '<div class="ex-title"><h3>'+e.n+'</h3><div class="ar">'+e.ar+'</div><p class="target"><b>'+e.d+'</b></p>'+
+      (e.tags?'<ul class="chips">'+e.tags.map(function(k){ return '<li>'+k+'</li>'; }).join("")+'</ul>':'')+'</div>'+
+      '<p class="cue">'+e.cue+'</p>'+
+      '<div class="acts">'+
+        (e.hold?'<button type="button" class="btn ghost" data-act="hold" data-s="'+e.hold+'">عدّاد '+e.hold+' ث</button>':'')+
+        '<button type="button" class="donebtn" data-act="rcheck" data-ex="'+e.id+'" aria-pressed="'+on+'">'+CHECK+'<span>تم</span></button>'+
+      '</div>'+
+      (e.q?'<a class="demo" href="https://www.youtube.com/results?search_query='+encodeURIComponent(e.q)+'" target="_blank" rel="noopener">شاهد الأداء الصحيح على يوتيوب</a>':'')+
+    '</article>');
+  });
+  h.push('<div class="savebar"><button type="button" class="btn" data-act="save">حفظ اليوم</button></div>');
+}
+
+var pendingDel = null;
+function renderLog(){
+  if(!S.sessions.length){
+    $("app").innerHTML = '<div class="empty">لسه مفيش تمارين محفوظة. خلّص تمرين اليوم واضغط "حفظ تمرين اليوم" وهيظهر هنا.</div>';
+    return;
+  }
+  $("app").innerHTML = progressCard() + S.sessions.map(function(s){
+    var day = dayOf(s.day), lines = [];
+    if(day && day.rest){ day.ex.forEach(function(e){ if(s.done && s.done.indexOf(e.id)>-1) lines.push('<li><span>'+e.n+'</span><span>تم</span></li>'); }); }
+    else if(day) day.ex.forEach(function(e){
+      var a = s.sets[e.id]; if(!a || !a.length) return;
+      lines.push('<li><span>'+e.n+'</span><span>'+a.map(function(x){ return (x.w||0)+'×'+(x.r||0); }).join(' · ')+'</span></li>');
+    });
+    return '<section class="sess"><header><div><h3>'+(day?day.name:"")+'</h3><div class="d">'+fmtDate(s.date)+'</div></div>'+
+      '<button type="button" class="btn ghost'+(pendingDel===s.id?' danger':'')+'" data-act="del" data-id="'+s.id+'">'+(pendingDel===s.id?'تأكيد الحذف':'حذف')+'</button></header><ul>'+lines.join("")+'</ul></section>';
+  }).join("");
+}
+
+function renderWelcome(){var n=String(S.prefs.visitorName||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});$("app").innerHTML='<section class="welcome-card"><div class="welcome-photo"><img src="./assets/kareem.jpg" alt="كريم سامي" onerror="this.style.display=\'none\'"><div class="photo-fallback">كريم سامي</div></div><p class="eyebrow">دفتر التمرين · كريم سامي</p><h2>أهلًا بيك</h2><p class="sub">ابدأ بهدوء، وسجّل تقدمك يوم ورا يوم. كل خطوة محسوبة.</p><div class="social-links"><a href="https://www.instagram.com/kareem._.samy/" target="_blank" rel="noopener noreferrer">إنستجرام</a><a href="https://wa.me/201080430388" target="_blank" rel="noopener noreferrer">واتساب</a></div><label class="fld">اسمك<input id="visitor-name" type="text" value="'+n+'" maxlength="30" placeholder="مثال: محمد" autocomplete="given-name"></label><button type="button" class="btn" data-act="welcome-go">ادخل الدفتر</button><small class="sub privacy-note">اسمك وبياناتك بتتحفظ على الجهاز ده فقط، ومش بتظهر لكريم.</small></section>';}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-act]");if(!b)return;var a=b.getAttribute("data-act");if(a==="welcome-go"){var n=($("visitor-name").value||"").trim();if(!n){toast("اكتب اسمك أو ابدأ باسم بسيط");$("visitor-name").focus();return;}S.prefs.visitorName=n;persist();renderAll();window.scrollTo(0,0);}else if(a==="rename"){var n=prompt("تحب يظهر لك بإيه؟",S.prefs.visitorName||"");if(n&&n.trim()){S.prefs.visitorName=n.trim().slice(0,30);persist();renderAll();}}else if(a==="intention-start"){toast("بسم الله، ربنا يبارك لك في وقتك ومجهودك.");}});
+
+function renderAll(){
+  if(!S.prefs.visitorName){document.body.classList.add("welcome");renderWelcome();updateProgress();return;} document.body.classList.remove("welcome");
+  renderTabs();
+  ["today","train","log","body","food","share"].forEach(function(v){ document.body.classList.toggle("v-"+v, v===view); });
+  var ids = {today:"vo",train:"vt",log:"vl",body:"vb",food:"vf",share:"vs"};
+  Object.keys(ids).forEach(function(v){ $(ids[v]).setAttribute("aria-pressed", v===view); });
+  if(view==="today") renderToday(); else if(view==="train") renderTrain(); else if(view==="log") renderLog();
+  else if(view==="body") renderBody(); else if(view==="food") renderFood(); else renderShare();
+  updateProgress();
+}
+
+/* ---------- rest timer ---------- */
+var restEnd = 0, restTotal = 0, restTick = null, actx = null;
+function beep(){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.25,0.5].forEach(function(t){
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type = "sine"; o.frequency.value = 880; g.gain.value = 0.15;
+      o.connect(g); g.connect(actx.destination);
+      o.start(actx.currentTime+t); o.stop(actx.currentTime+t+0.15);
+    });
+  }catch(e){}
+  try{ if(navigator.vibrate) navigator.vibrate([200,100,200]); }catch(e){}
+}
+var holdMode = false;
+function startRest(sec, label){
+  holdMode = (label==="ثبات");
+  try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==="suspended") actx.resume(); }catch(e){}
+  restTotal = sec; restEnd = Date.now()+sec*1000;
+  $("rest").hidden = false; document.body.classList.add("resting");
+  $("restlbl").textContent = label || "راحة";
+  clearInterval(restTick); restTick = setInterval(tick, 250); tick();
+}
+function stopRest(){
+  clearInterval(restTick); restTick = null; $("rest").hidden = true; document.body.classList.remove("resting");
+}
+function tick(){
+  var left = Math.ceil((restEnd-Date.now())/1000);
+  if(left<=0){
+    clearInterval(restTick); restTick = null;
+    $("resttime").textContent = "0:00"; $("restfill").style.transform = "scaleX(0)";
+    $("restlbl").textContent = holdMode ? "خلص الوقت" : "خلصت الراحة، ابدأ المجموعة الجاية";
+    beep();
+    setTimeout(function(){ if(!restTick) stopRest(); }, 5000);
+    return;
+  }
+  $("resttime").textContent = mmss(left);
+  $("restfill").style.transform = "scaleX("+Math.min(1,left/restTotal)+")";
+  var adhkar=["سبحان الله","الحمد لله","أستغفر الله","لا إله إلا الله","اللهم صلِّ وسلم على نبينا محمد"],zi=$("restzikr");if(zi)zi.textContent=adhkar[Math.floor((restTotal-left)/12)%adhkar.length];
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", function(ev){
+  var b = ev.target.closest("[data-act]"); if(!b) return;
+  var a = b.getAttribute("data-act");
+  if(a==="day"){ dayIdx = +b.getAttribute("data-i"); S.prefs.day = dayIdx; persist(); view = "train"; renderAll(); window.scrollTo(0,0); }
+  else if(a==="view"){ view = b.getAttribute("data-v"); pendingDel = null; renderAll(); window.scrollTo(0,0); }
+  else if(a==="rest"){ S.prefs.rest = +b.getAttribute("data-s"); persist(); renderTabs(); }
+  
+  else if(a==="check"){
+    var d = draftFor(DAYS[dayIdx]), x = d[b.getAttribute("data-ex")][+b.getAttribute("data-i")];
+    x.d = !x.d; persist();
+    b.setAttribute("aria-pressed", x.d);
+    b.closest(".set").classList.toggle("done", x.d);
+    updateProgress();
+    if(x.d){ var exo = null; DAYS[dayIdx].ex.forEach(function(q){ if(q.id===b.getAttribute("data-ex")) exo = q; }); startRest(exo && exo.rest ? exo.rest : S.prefs.rest); }
+  }
+  else if(a==="rest-add"){ restEnd += (+b.getAttribute("data-s"))*1000; restTotal += (+b.getAttribute("data-s")); if(!restTick){ restTick = setInterval(tick,250); } tick(); }
+  else if(a==="rest-skip"){ stopRest(); }
+  else if(a==="rcheck"){ var dd = draftFor(DAYS[dayIdx]), rid = b.getAttribute("data-ex"); dd[rid] = !dd[rid]; persist(); b.setAttribute("aria-pressed", !!dd[rid]); updateProgress(); }
+  else if(a==="hold"){ startRest(+b.getAttribute("data-s"), "ثبات"); }
+  else if(a==="save"){ saveSession(); }
+  else if(a==="del"){
+    var id = +b.getAttribute("data-id");
+    if(pendingDel===id){ S.sessions = S.sessions.filter(function(s){ return s.id!==id; }); pendingDel = null; persist(); toast("اتحذف"); }
+    else pendingDel = id;
+    renderAll();
+  }
+});
+document.addEventListener("input", function(ev){
+  var t = ev.target; if(!t.matches || !t.matches("input[data-ex]")) return;
+  var v = t.value.replace(",",".").replace(/[^0-9.]/g,"");
+  if(t.getAttribute("data-f")==="r") v = v.replace(/\./g,"");
+  if(v!==t.value) t.value = v;
+  var d = draftFor(DAYS[dayIdx]);
+  d[t.getAttribute("data-ex")][+t.getAttribute("data-i")][t.getAttribute("data-f")] = v;
+  persist();
+});
+
+function saveSession(){
+  var day = DAYS[dayIdx], d = draftFor(day), sets = {}, n = 0;
+  if(day.rest){
+    var done = visibleEx(day).filter(function(e){ return d[e.id]; }).map(function(e){ return e.id; });
+    if(!done.length){ toast("علّم مهمة واحدة على الأقل"); return; }
+    var k2 = todayKey();
+    S.sessions = S.sessions.filter(function(s){ return !(s.date===k2 && s.day===day.id); });
+    S.sessions.unshift({id:Date.now(), date:k2, day:day.id, sets:{}, done:done});
+    S.sessions.sort(function(a,b){ return a.date<b.date?1:a.date>b.date?-1:b.id-a.id; });
+    delete S.draft[day.id];
+    persist(); stopRest(); toast("الحمد لله، خلّصت مهام النهارده. عاش يا بطل."); renderAll(); window.scrollTo(0,0); return;
+  }
+  visibleEx(day).forEach(function(e){
+    var arr = [];
+    d[e.id].forEach(function(x){
+      var w = parseFloat(x.w), r = parseInt(x.r,10);
+      if((x.d || x.w!=="" || x.r!=="") && (w>0 || r>0)){ arr.push({w:isNaN(w)?0:w, r:isNaN(r)?0:r}); n++; }
+    });
+    if(arr.length) sets[e.id] = arr;
+  });
+  if(!n){ toast("سجّل مجموعة واحدة على الأقل"); return; }
+  var key = todayKey();
+  S.sessions = S.sessions.filter(function(s){ return !(s.date===key && s.day===day.id); });
+  var prs = [];
+  Object.keys(sets).forEach(function(id){
+    var prev = 0; S.sessions.forEach(function(s){ if(s.sets && s.sets[id]) s.sets[id].forEach(function(x){ if(x.w>prev) prev = x.w; }); });
+    var mx = 0; sets[id].forEach(function(x){ if(x.w>mx) mx = x.w; });
+    if(prev>0 && mx>prev) prs.push(id);
+  });
+  var ns = {id:Date.now(), date:key, day:day.id, sets:sets}; if(prs.length) ns.pr = prs;
+  S.sessions.unshift(ns);
+  S.sessions.sort(function(a,b){ return a.date<b.date?1:a.date>b.date?-1:b.id-a.id; });
+  delete S.draft[day.id];
+  persist(); stopRest();
+  toast(prs.length ? "الحمد لله، خلّصت التمرين وحققت رقم جديد. عاش يا بطل!" : "الحمد لله، خلّصت تمرين النهارده. عاش يا بطل، كمل على مهلك.");
+  renderAll(); window.scrollTo(0,0);
+}
+
+/* ================= v2: اليوم، الجسم، الأكل، الملخص ================= */
+function pk(k){ var p=k.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+function dk(d){ return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+function addD(k,n){ var d=pk(k); d.setDate(d.getDate()+n); return dk(d); }
+function diffD(a,b){ return Math.round((pk(a)-pk(b))/86400000); }
+function weekStartKey(k){ var d=pk(k); return addD(k, -((d.getDay()-5+7)%7)); }
+function sd(k){ var d=pk(k); return d.getDate()+"/"+(d.getMonth()+1); }
+function planIdx(k){ var dow=pk(k).getDay(); for(var i=0;i<DAYS.length;i++){ if(DAYS[i].dow===dow) return i; } return 0; }
+function planLabel(i){ var d=DAYS[i]; return d.rest ? d.name : "تمرين "+d.name; }
+function r1(n){ return Math.round(n*10)/10; }
+
+function trainSessionOn(k){ return S.sessions.some(function(s){ if(s.date!==k) return false; var d=dayOf(s.day); return !!d && !d.rest; }); }
+function planDoneOn(k){ var pi=planIdx(k); return S.sessions.some(function(s){ return s.date===k && s.day===DAYS[pi].id; }); }
+function weekTrainCount(ws){ var n=0; for(var i=0;i<7;i++){ if(trainSessionOn(addD(ws,i))) n++; } return n; }
+function weekSets(ws){ var n=0; for(var i=0;i<7;i++){ var k=addD(ws,i); S.sessions.forEach(function(s){ if(s.date===k){ var d=dayOf(s.day); if(d && !d.rest){ Object.keys(s.sets||{}).forEach(function(e){ n+=s.sets[e].length; }); } } }); } return n; }
+function weekPRs(ws){ var n=0; for(var i=0;i<7;i++){ var k=addD(ws,i); S.sessions.forEach(function(s){ if(s.date===k && s.pr) n+=s.pr.length; }); } return n; }
+function firstDate(){
+  var m = null;
+  function c(k){ if(k && (m===null || k<m)) m=k; }
+  S.sessions.forEach(function(s){ c(s.date); });
+  Object.keys(S.weights).forEach(c); Object.keys(S.habits).forEach(c);
+  return m;
+}
+function firstSessionDate(){ var m=null; S.sessions.forEach(function(s){ if(m===null || s.date<m) m=s.date; }); return m; }
+
+function calcFood(){
+  var p=S.profile, kg=parseFloat(p.w)||latestAvg(), h=parseFloat(p.h), age=parseFloat(p.age);
+  if(!(kg>0 && h>0 && age>0)) return null;
+  var act=+p.act||1.55, bmr=10*kg+6.25*h-5*age+5, tdee=bmr*act;
+  var adj={gain:250,maintain:0,cut:-400}[p.goal]; if(adj===undefined) adj=0;
+  var cal=Math.round((tdee+adj)/10)*10;
+  var prot=Math.round(kg*(p.goal==="cut"?2.2:1.8)), fat=Math.round(kg*0.9);
+  var carb=Math.max(0, Math.round((cal-prot*4-fat*9)/4));
+  return {kg:kg,bmr:Math.round(bmr),tdee:Math.round(tdee),cal:cal,prot:prot,fat:fat,carb:carb};
+}
+function proteinText(){ var f=calcFood(); return f ? f.prot+" جم" : "125–145 جم"; }
+
+function dayInfo(k){
+  var h=S.habits[k]||{}, pi=planIdx(k), t=[];
+  t.push({id:"weigh",label:"وزن الصبح",done:S.weights[k]!=null,auto:true});
+  t.push({id:"plan",label:planLabel(pi),done:planDoneOn(k),auto:true});
+  t.push({id:"protein",label:"وصلت لهدف البروتين",hint:proteinText(),done:!!h.protein});
+  t.push({id:"water",label:"ميه 3 لتر",done:!!h.water});
+  t.push({id:"sleep",label:"نوم 7 ساعات أو أكتر",done:!!h.sleep});
+  var s=0; t.forEach(function(x){ if(x.done) s++; });
+  return {tasks:t,score:s,total:t.length};
+}
+function goodDay(k){ return dayInfo(k).score>=3; }
+function curStreak(){ var k=todayKey(), n=0; if(!goodDay(k)) k=addD(k,-1); while(n<400 && goodDay(k)){ n++; k=addD(k,-1); } return n; }
+function maxStreak(){
+  var f=firstDate(); if(!f) return 0;
+  var k=f, t=todayKey(), best=0, cur=0, g=0;
+  while(k<=t && g<800){ if(goodDay(k)){ cur++; if(cur>best) best=cur; } else cur=0; k=addD(k,1); g++; }
+  return best;
+}
+function consecWeeks(){
+  var f=firstSessionDate(); if(!f) return 0;
+  var fw=weekStartKey(f), ws=addD(weekStartKey(todayKey()),-7), n=0;
+  while(ws>=fw && weekTrainCount(ws)>=3){ n++; ws=addD(ws,-7); }
+  return n;
+}
+function anyFullWeek(){
+  var f=firstSessionDate(); if(!f) return false;
+  var ws=weekStartKey(f), end=weekStartKey(todayKey());
+  while(ws<=end){ if(weekTrainCount(ws)>=4) return true; ws=addD(ws,7); }
+  return false;
+}
+function totalSets(){ var n=0; S.sessions.forEach(function(s){ var d=dayOf(s.day); if(d && !d.rest){ Object.keys(s.sets||{}).forEach(function(e){ n+=s.sets[e].length; }); } }); return n; }
+
+/* وزن */
+function wKeys(){ return Object.keys(S.weights).sort(); }
+function avg7(k){ var s=0,n=0; for(var i=0;i<7;i++){ var v=S.weights[addD(k,-i)]; if(v!=null){ s+=v; n++; } } return n ? s/n : null; }
+function latestAvg(){ var ks=wKeys(); return ks.length ? avg7(ks[ks.length-1]) : null; }
+function weeklyRatePct(){
+  var ks=wKeys(), t=todayKey(), from=addD(t,-21);
+  var pts=ks.filter(function(k){ return k>=from; }).map(function(k){ return [diffD(k,from),S.weights[k]]; });
+  if(pts.length<8) return null;
+  var n=pts.length, sx=0, sy=0, sxx=0, sxy=0;
+  pts.forEach(function(p){ sx+=p[0]; sy+=p[1]; sxx+=p[0]*p[0]; sxy+=p[0]*p[1]; });
+  var den=n*sxx-sx*sx; if(!den) return null;
+  var slope=(n*sxy-sx*sy)/den;
+  return {kgWeek:slope*7, pct:slope*7/(sy/n)*100};
+}
+
+/* رسم */
+function niceStep(r){ var st=[0.1,0.2,0.5,1,2,5,10,20,50,100]; for(var i=0;i<st.length;i++){ if(st[i]>=r) return st[i]; } return 100; }
+function chartSVG(o){
+  var W=340,H=190,L=38,Rr=14,T=16,B=26, all=o.dots.concat(o.line||[]);
+  var ymin=Infinity, ymax=-Infinity;
+  all.forEach(function(p){ if(p[1]<ymin) ymin=p[1]; if(p[1]>ymax) ymax=p[1]; });
+  var step=niceStep(Math.max(ymax-ymin,0.4)/3);
+  var lo=Math.floor(ymin/step)*step, hi=Math.ceil(ymax/step)*step; if(hi===lo) hi=lo+step;
+  var x0=o.x0, x1=o.x1; if(x1===x0) x1=x0+1;
+  function X(v){ return L+(v-x0)/(x1-x0)*(W-L-Rr); }
+  function Y(v){ return T+(hi-v)/(hi-lo)*(H-T-B); }
+  var s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+o.label+'">';
+  for(var v=lo; v<=hi+1e-9; v+=step){ var yy=Y(v); s+='<line class="ch-grid" x1="'+L+'" x2="'+(W-Rr)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'"/><text class="ch-t" x="'+(L-6)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="end">'+(+v.toFixed(1))+'</text>'; }
+  (o.xl||[]).forEach(function(p){ s+='<text class="ch-t" x="'+X(p[0]).toFixed(1)+'" y="'+(H-8)+'" text-anchor="'+(p[2]||"middle")+'">'+p[1]+'</text>'; });
+  if(o.line && o.line.length>1) s+='<polyline class="ch-line" points="'+o.line.map(function(p){ return X(p[0]).toFixed(1)+","+Y(p[1]).toFixed(1); }).join(" ")+'"/>';
+  o.dots.forEach(function(p){ s+='<circle class="ch-dot" cx="'+X(p[0]).toFixed(1)+'" cy="'+Y(p[1]).toFixed(1)+'" r="2.4"/>'; });
+  var last=(o.line && o.line.length ? o.line : o.dots).slice(-1)[0];
+  if(last){ var lx=X(last[0]), ly=Y(last[1]); s+='<circle class="ch-end" cx="'+lx.toFixed(1)+'" cy="'+ly.toFixed(1)+'" r="4"/><text class="ch-lab" x="'+Math.min(lx+2,W-2).toFixed(1)+'" y="'+(ly-9).toFixed(1)+'" text-anchor="end">'+(+last[1].toFixed(1))+'</text>'; }
+  return s+'</svg>';
+}
+function weightChart(){
+  var ks=wKeys(), t=todayKey(), range=S.prefs.wr===undefined ? 56 : S.prefs.wr;
+  var from = range ? addD(t,-range) : (ks[0]||t);
+  var sel=ks.filter(function(k){ return k>=from; });
+  if(sel.length<2) return '<div class="empty">سجّل وزنك يومين على الأقل وبعدها الرسم يظهر هنا.</div>';
+  var b=sel[0], x1=diffD(sel[sel.length-1],b);
+  var xl=[[0,sd(b),"start"],[x1,sd(sel[sel.length-1]),"end"]];
+  if(x1>=10) xl.splice(1,0,[Math.round(x1/2),sd(addD(b,Math.round(x1/2))),"middle"]);
+  return chartSVG({label:"رسم الوزن اليومي ومتوسط 7 أيام",x0:0,x1:x1,xl:xl,
+    dots:sel.map(function(k){ return [diffD(k,b),S.weights[k]]; }),
+    line:sel.map(function(k){ return [diffD(k,b),avg7(k)]; })});
+}
+
+/* تقدم التمارين (في السجل) */
+function exName(id){ for(var i=0;i<DAYS.length;i++){ for(var j=0;j<DAYS[i].ex.length;j++){ if(DAYS[i].ex[j].id===id) return AR[id]||DAYS[i].ex[j].n; } } return id; }
+function exWithData(){
+  var out=[];
+  DAYS.forEach(function(d){ if(!d.rest) d.ex.forEach(function(e){ if(S.sessions.some(function(s){ return s.sets && s.sets[e.id] && s.sets[e.id].some(function(x){ return x.w>0; }); })) out.push(e.id); }); });
+  return out;
+}
+function progressCard(){
+  var ids=exWithData(); if(!ids.length) return "";
+  var cur=S.prefs.ex; if(ids.indexOf(cur)<0) cur=ids[0];
+  var pts=[];
+  S.sessions.slice().reverse().forEach(function(s){
+    if(s.sets && s.sets[cur]){ var m=0; s.sets[cur].forEach(function(x){ if(x.w>m) m=x.w; }); if(m>0) pts.push({k:s.date,v:m}); }
+  });
+  var opts=ids.map(function(id){ return '<option value="'+id+'"'+(id===cur?' selected':'')+'>'+exName(id)+'</option>'; }).join("");
+  var chart='<div class="empty">سجّل التمرين ده مرتين على الأقل وبعدها الرسم يظهر.</div>';
+  if(pts.length>=2){
+    var b=pts[0].k, x1=diffD(pts[pts.length-1].k,b), best=0; pts.forEach(function(p){ if(p.v>best) best=p.v; });
+    chart=chartSVG({label:"أعلى وزن في كل مرة",x0:0,x1:x1,xl:[[0,sd(b),"start"],[x1,sd(pts[pts.length-1].k),"end"]],dots:pts.map(function(p){ return [diffD(p.k,b),p.v]; }),line:pts.map(function(p){ return [diffD(p.k,b),p.v]; })})+
+      '<p class="sub">أعلى وزن وصلت له: <b>'+best+' kg</b></p>';
+  }
+  return '<section class="card"><h2>تقدم التمرين</h2><label class="fld">اختار التمرين<select id="exsel">'+opts+'</select></label>'+chart+'</section>';
+}
+
+/* تحفيز */
+var MSGS=["الثبات أهم من الحماس. تمرين عادي كل أسبوع أحسن من تمرين خرافي كل شهر.",
+"سجّل أوزانك كل مرة. اللي بيتسجل هو اللي بيتزود.",
+"العضل بيتبني في الأكل والنوم زي ما بيتبني في الجيم.",
+"لو مش حاسس بحماس، ابدأ بأول تمرين بس. بعده هتكمل.",
+"المهم اتجاه الأسابيع مش رقم يوم واحد.",
+"الراحة جزء من البرنامج، مش تفريط.",
+"ركّز على الأداء النضيف الأول والوزن بييجي بعدين.",
+"3 مهام من 5 كفاية عشان اليوم يتحسب يوم جيد."];
+function coachNotes(){
+  var t=todayKey(), ws=weekStartKey(t), f=firstSessionDate(), out=[];
+  if(f){
+    var missed=[];
+    for(var i=0;i<DAYS.length;i++){ var k=addD(ws,i); if(!DAYS[i].rest && k<t && k>=f && !planDoneOn(k)) missed.push(DAYS[i].name+" ("+DAYS[i].wd+")"); }
+    if(missed.length) out.push({t:"warn",x:"فاتك: "+missed.join("، ")+". ماتضاعفش التمرين اللي بعده. كمّل على الجدول وابدأ التمرين الجاي من غير ما تعوّض."});
+  }
+  var cw=consecWeeks();
+  if(cw>=6) out.push({t:"warn",x:"بقالك "+cw+" أسابيع ملتزم. فكّر في أسبوع أخف (نفس التمارين بنص المجموعات) قبل ما تقف أوزانك."});
+  var gk=wKeys(); 
+  if(gk.length && diffD(t,gk[gk.length-1])>=3) out.push({t:"warn",x:"ماوزنتش نفسك بقالك "+diffD(t,gk[gk.length-1])+" أيام. الوزن اليومي هو اللي بيوضّح الاتجاه."});
+  var lm=S.meas.length ? S.meas[S.meas.length-1].date : null;
+  if(lm && diffD(t,lm)>=14) out.push({t:"warn",x:"عدّى "+diffD(t,lm)+" يوم على آخر قياس للجسم. وقت قياس جديد (تاب الجسم)."});
+  var rt=weeklyRatePct();
+  if(rt){
+    var g=S.profile.goal||"gain";
+    if(g==="gain" && rt.pct<0.1) out.push({t:"warn",x:"متوسط وزنك ثابت أو بينزل ("+r1(rt.kgWeek)+" كجم في الأسبوع) وهدفك تزيد. زوّد 150–200 سعرة."});
+    else if(g==="gain" && rt.pct>0.6) out.push({t:"warn",x:"بتزيد بسرعة ("+r1(rt.kgWeek)+" كجم في الأسبوع). نزّل 100–150 سعرة عشان الزيادة تبقى عضل أكتر من دهون."});
+    else if(g==="gain") out.push({t:"good",x:"معدل زيادتك ("+r1(rt.kgWeek)+" كجم في الأسبوع) في المعدل المناسب للتضخيم النضيف."});
+    if(g==="maintain" && Math.abs(rt.pct)>0.4) out.push({t:"warn",x:"وزنك بيتغير "+r1(rt.kgWeek)+" كجم في الأسبوع وهدفك تثبيت. عدّل السعرات 100–150."});
+    if(g==="cut" && rt.pct>-0.2) out.push({t:"warn",x:"الوزن مش بينزل بما يكفي. قلّل 100–150 سعرة."});
+    if(g==="cut" && rt.pct<-1) out.push({t:"warn",x:"بتنزل بسرعة. زوّد السعرات شوية عشان تحافظ على العضل."});
+  }
+  if(weekTrainCount(ws)>=4) out.push({t:"good",x:"أسبوع كامل: 4 من 4 تمارين. ده اللي بيبني."});
+  var pr=null; S.sessions.forEach(function(s){ if(s.pr && s.pr.length && diffD(t,s.date)<=3 && !pr) pr=s; });
+  if(pr) out.push({t:"good",x:"رقم قياسي جديد في "+pr.pr.map(exName).join("، ")+". عاش."});
+  var st=curStreak(); if(st>=3) out.push({t:"good",x:st+" أيام متتالية جيدة. كمّل."});
+  if(dayInfo(t).score===dayInfo(t).total) out.push({t:"good",x:"خلّصت كل مهام النهارده."});
+  var order={warn:0,good:1,info:2};
+  out.sort(function(a,b){ return order[a.t]-order[b.t]; });
+  return out.slice(0,5);
+}
+function badgesList(){
+  var cnt=S.sessions.filter(function(s){ var d=dayOf(s.day); return d && !d.rest; }).length;
+  var prs=0; S.sessions.forEach(function(s){ if(s.pr) prs+=s.pr.length; });
+  return [
+    {n:"أول تمرين",d:"سجّلت تمرين",on:cnt>=1},
+    {n:"أسبوع كامل",d:"4 تمارين في أسبوع",on:anyFullWeek()},
+    {n:"4 أسابيع التزام",d:"3 تمارين أو أكتر 4 أسابيع ورا بعض",on:consecWeeks()>=4},
+    {n:"أول رقم قياسي",d:"كسرت أعلى وزن ليك",on:prs>=1},
+    {n:"100 مجموعة",d:"سجّلت 100 مجموعة",on:totalSets()>=100},
+    {n:"سلسلة 7 أيام",d:"7 أيام جيدة ورا بعض",on:maxStreak()>=7},
+    {n:"14 وزن",d:"وزنت نفسك 14 مرة",on:Object.keys(S.weights).length>=14},
+    {n:"أول قياس جسم",d:"سجّلت قياسات الجسم",on:S.meas.length>=1}
+  ];
+}
+
+/* شاشة اليوم */
+function renderPrayerCard(k){
+  var names=[["fajr","الفجر"],["dhuhr","الظهر"],["asr","العصر"],["maghrib","المغرب"],["isha","العشاء"]], p=S.prayers[k]||{}, count=names.filter(function(n){return !!p[n[0]];}).length;
+  return '<section class="card"><h2>الصلاة <span class="sub" style="float:left">'+count.toLocaleString("ar-EG")+' من ٥</span></h2><p class="sub">متابعة يومية بسيطة، للتشجيع الشخصي فقط.</p><div class="prayer-grid">'+names.map(function(n){var ok=!!p[n[0]];return '<button type="button" class="prayer-chip" data-act="prayer" data-p="'+n[0]+'" aria-pressed="'+ok+'">'+(ok?'✓ ':'□ ')+n[1]+'</button>';}).join('')+'</div><p class="sub">مش داخلة في نقاط اليوم أو سلسلة الإنجاز؛ علّم اللي تحب تتابعه، وكمل يومك براحتك.</p></section>';
+}
+function renderHadithCard(){return '<section class="card hadith-card"><p class="sub">تذكير لطيف</p><blockquote>«المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف، وفي كلٍّ خير. احرص على ما ينفعك، واستعن بالله ولا تعجز.»</blockquote><small>رواه مسلم · صحيح مسلم ٢٦٦٤ · <a href="https://sunnah.com/muslim/46/52" target="_blank" rel="noopener noreferrer">المصدر</a></small></section>';}
+function renderToday(){
+  var tk=todayKey(), pi=planIdx(tk), day=DAYS[pi], info=dayInfo(tk), ws=weekStartKey(tk), h=[];
+  var hr=new Date().getHours(), done=planDoneOn(tk);
+  var vis=visibleEx(day).length;
+  var planLine;
+  if(day.rest) planLine = day.note;
+  else { var sets=0; visibleEx(day).forEach(function(e){ sets+=e.s; }); planLine = vis+" تمرين، "+sets+" مجموعة."; }
+  h.push('<section class="card home-card"><p class="sub">'+(S.prefs.visitorName?'أهلًا يا '+escFood(S.prefs.visitorName):'أهلًا بيك')+' · '+fmtDate(tk)+' <button class="link-btn" type="button" data-act="rename">تغيير الاسم</button></p><h2>'+(day.rest?day.name+" النهارده":"النهارده: "+day.name)+'</h2><p class="sub">'+planLine+'</p>'+(done?'<div class="banner note good">الحمد لله، سجّلت تمرين النهارده.</div>':'')+'<div class="rowbtns"><button type="button" class="btn" data-act="gotrain" data-i="'+pi+'">'+(done?"افتح التمرين":"ابدأ")+'</button></div><p class="sub">'+MSGS[Math.abs(diffD(tk,"2026-01-01"))%MSGS.length]+'</p><div class="social-links"><a href="https://www.instagram.com/kareem._.samy/" target="_blank" rel="noopener noreferrer">إنستجرام</a><a href="https://wa.me/201080430388" target="_blank" rel="noopener noreferrer">واتساب</a><span>لو محتاج توضيح</span></div></section>');
+  var notes=coachNotes();
+  notes.forEach(function(n){ h.push('<div class="banner note '+n.t+'">'+n.x+'</div>'); });
+  var wd=weekTrainCount(ws), chips="";
+  for(var i=0;i<7;i++){
+    var k=addD(ws,i), d=DAYS[i], st;
+    if(planDoneOn(k)) st="done"; else if(k===tk) st="today"; else if(k<tk && !d.rest && firstSessionDate() && k>=firstSessionDate()) st="missed"; else st="future";
+    var mark = st==="done"?"✓":(st==="missed"?"✗":(st==="today"?"•":"–"));
+    if(k===tk && st==="done") st="done today";
+    chips+='<div class="'+st+'">'+d.wd+'<b>'+mark+'</b></div>';
+  }
+  h.push('<section class="card"><h2>الأسبوع: '+wd+' / 4 تمارين</h2><div class="wk">'+chips+'</div>'+
+    '<p class="sub">الأسبوع بيبدأ الجمعة. فاضل تمارين: '+(4-wd>0?(4-wd):0)+'</p></section>');
+  var tasks=info.tasks.map(function(t){
+    if(t.id==="weigh"){
+      return '<div class="task"><div class="tl">'+t.label+(t.done?'<small>'+S.weights[tk]+' kg</small>':'')+'</div>'+
+        (t.done?'<span class="up">تم</span>':'<div class="qrow"><input type="text" inputmode="decimal" id="qw" placeholder="kg" aria-label="وزن النهارده"><button type="button" class="btn ghost" data-act="qwsave">سجّل</button></div>')+'</div>';
+    }
+    if(t.auto) return '<div class="task"><div class="tl">'+t.label+'<small>بيتعلّم لما تحفظ اليوم</small></div>'+(t.done?'<span class="up">تم</span>':'<span class="sub">لسه</span>')+'</div>';
+    return '<div class="task"><div class="tl">'+t.label+(t.hint?'<small>'+t.hint+'</small>':'')+'</div><button type="button" class="donebtn" data-act="habit" data-h="'+t.id+'" aria-pressed="'+t.done+'" aria-label="'+t.label+'">'+CHECK+'</button></div>';
+  }).join("");
+  h.push('<section class="card"><h2>مهام النهارده: '+info.score+' / '+info.total+'</h2><div class="tasks">'+tasks+'</div>'+
+    '<p class="sub">اليوم الجيد = 3 مهام من 5 على الأقل. السلسلة الحالية: <b>'+curStreak()+'</b> يوم، وأطول سلسلة: <b>'+maxStreak()+'</b>.</p></section>');
+  h.push(renderPrayerCard(tk)); h.push(renderHadithCard());
+  var bl=badgesList();
+  h.push('<section class="card"><h2>الإنجازات: '+bl.filter(function(b){ return b.on; }).length+' / '+bl.length+'</h2><div class="badges">'+
+    bl.map(function(b){ return '<div class="badge'+(b.on?'':' off')+'"><b>'+b.n+'</b>'+b.d+'</div>'; }).join("")+'</div></section>');
+  $("app").innerHTML=h.join("");
+}
+
+/* شاشة الجسم */
+function renderBody(){
+  var h=[], tk=todayKey(), ks=wKeys(), cur=null, prev=null, rt=weeklyRatePct();
+  if(ks.length){ var lk=ks[ks.length-1]; cur=avg7(lk); prev=avg7(addD(lk,-7)); }
+  var g=S.profile.goal||"gain", kg=cur||70;
+  var tip={gain:"المناسب للتضخيم النضيف حوالي "+r1(kg*0.0025)+" إلى "+r1(kg*0.005)+" كجم في الأسبوع (0.25–0.5% من وزنك).",
+    maintain:"للتثبيت، التغير الأسبوعي يفضل يكون أقل من "+r1(kg*0.0025)+" كجم.",
+    cut:"للتنشيف المناسب حوالي "+r1(kg*0.005)+" إلى "+r1(kg*0.01)+" كجم نزول في الأسبوع (0.5–1%)."}[g];
+  var ranges=[[28,"4 أسابيع"],[56,"8 أسابيع"],[0,"الكل"]];
+  var cr=S.prefs.wr===undefined?56:S.prefs.wr;
+  h.push('<section class="card"><h2>وزنك</h2>'+
+    '<div class="flds"><label class="fld">الوزن (kg)<input type="text" inputmode="decimal" id="wval" placeholder="72.0"></label>'+
+    '<label class="fld">التاريخ<input type="date" id="wdate" value="'+tk+'"></label></div>'+
+    '<div class="rowbtns"><button type="button" class="btn" data-act="wsave">سجّل الوزن</button></div>'+
+    '<div class="kpis"><div class="kpi"><b>'+(cur?r1(cur):"–")+'</b><span>متوسط 7 أيام</span></div>'+
+    '<div class="kpi"><b>'+(cur&&prev?((cur-prev>0?"+":"")+r1(cur-prev)):"–")+'</b><span>عن الأسبوع اللي فات</span></div>'+
+    '<div class="kpi"><b>'+(rt?((rt.kgWeek>0?"+":"")+r1(rt.kgWeek)):"–")+'</b><span>كجم في الأسبوع</span></div></div>'+
+    '<div class="seg" aria-label="مدى الرسم">'+ranges.map(function(r){ return '<button type="button" data-act="wr" data-r="'+r[0]+'" aria-pressed="'+(cr===r[0])+'">'+r[1]+'</button>'; }).join("")+'</div>'+
+    weightChart()+
+    '<p class="sub">النقط هي وزنك اليومي والخط متوسط 7 أيام. الوزن اليومي بيتأرجح بسبب الميه والأكل، فاتبع الخط. '+tip+' (ده هدف تقريبي)</p>'+
+    (ks.length?'<ul class="list">'+ks.slice(-5).reverse().map(function(k){ return '<li><span>'+fmtDate(k)+'</span><span>'+S.weights[k]+' kg</span><button type="button" class="btn ghost" data-act="wdel" data-k="'+k+'">حذف</button></li>'; }).join("")+'</ul>':'')+
+    '</section>');
+  var M=[["arm","الدراع"],["chest","الصدر"],["waist","الوسط"],["thigh","الفخذ"],["sh","الكتفين"]];
+  var last=S.meas.length?S.meas[S.meas.length-1]:null, due=last?diffD(tk,last.date):null;
+  var tbl="";
+  if(S.meas.length){
+    var rows=S.meas.slice(-4).reverse();
+    tbl='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>التاريخ</th>'+M.map(function(m){ return '<th>'+m[1]+'</th>'; }).join("")+'<th></th></tr></thead><tbody>'+
+      rows.map(function(r){
+        var i=S.meas.indexOf(r), pv=i>0?S.meas[i-1]:null;
+        return '<tr><td>'+sd(r.date)+'</td>'+M.map(function(m){
+          var v=r[m[0]]; if(v==null) return '<td>–</td>';
+          var dl=(pv&&pv[m[0]]!=null)?r1(v-pv[m[0]]):null;
+          return '<td>'+v+(dl!==null?'<span class="dl'+(dl>0?' up2':'')+'">'+(dl>0?"+":"")+dl+'</span>':'')+'</td>';
+        }).join("")+'<td><button type="button" class="btn ghost" data-act="mdel" data-d="'+r.date+'">حذف</button></td></tr>';
+      }).join("")+'</tbody></table></div>';
+  }
+  h.push('<section class="card"><h2>قياسات الجسم (cm)</h2><p class="sub">كل أسبوعين. '+(due!==null?(due>=14?"عدّى "+due+" يوم على آخر قياس، وقت قياس جديد.":"آخر قياس من "+due+" يوم."):"لسه ماسجلتش قياس.")+'</p>'+
+    '<div class="flds three">'+M.map(function(m){ return '<label class="fld">'+m[1]+'<input type="text" inputmode="decimal" id="m-'+m[0]+'" placeholder="cm"></label>'; }).join("")+
+    '<label class="fld">التاريخ<input type="date" id="m-date" value="'+tk+'"></label></div>'+
+    '<div class="rowbtns"><button type="button" class="btn" data-act="msave">سجّل القياسات</button></div>'+tbl+
+    '<p class="sub">قس الصبح بعد الحمام، والعضل مرتخي، بنفس الشريط ونفس المكان (الدراع في أوسع نقطة، والصدر تحت الإبط، والوسط عند السرة، والفخذ في أوسع نقطة، والكتفين فوق أعرض نقطة). لو الوسط زاد والباقي ثابت، ده غالبًا دهون.</p></section>');
+  $("app").innerHTML=h.join("");
+}
+
+/* شاشة الأكل */
+function foodResult(){
+  var f=calcFood();
+  if(!f) return '<div class="empty">اكتب الطول والسن (والوزن لو مش مسجّل) وهتظهر أرقامك.</div>';
+  var tot=f.prot*4+f.fat*9+f.carb*4;
+  function row(n,g,kcal){ return '<div class="m1"><span>'+n+'</span><b>'+g+' جم</b><div class="bar2"><i style="width:'+Math.round(kcal/tot*100)+'%"></i></div></div>'; }
+  return '<div class="big">'+f.cal.toLocaleString("en-US")+'</div><p class="sub" style="text-align:center">سعرة في اليوم (BMR '+f.bmr+'، الصيانة '+f.tdee+')</p>'+
+    '<div class="macro">'+row("بروتين",f.prot,f.prot*4)+row("كاربوهيدرات",f.carb,f.carb*4)+row("دهون",f.fat,f.fat*9)+'</div>'+
+    '<p class="sub">وزّع البروتين على 4 وجبات: حوالي '+Math.round(f.prot/4)+' جم في الوجبة. أمثلة تقريبية: 100 جم صدور فراخ مطبوخة حوالي 31 جم، وبيضة كبيرة حوالي 6 جم.</p>'+
+    '<p class="sub">دي أرقام تقديرية (معادلة Mifflin-St Jeor) والخطأ ممكن يوصل 10%. شوف متوسط وزنك بعد 2–3 أسابيع وعدّل 100–200 سعرة لو لزم.</p>';
+}
+function escFood(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function todayMeals(){S.food=S.food||{days:{},favorites:[]};S.food.days=S.food.days||{};S.food.favorites=S.food.favorites||[];var k=todayKey();S.food.days[k]=S.food.days[k]||[];return S.food.days[k];}
+function renderFood(){
+  S.food=S.food||{days:{},favorites:[]};S.food.days=S.food.days||{};S.food.favorites=S.food.favorites||[];
+  var f=calcFood(),tab=S.prefs.foodTab||'log',meals=todayMeals(),fav=S.food.favorites,totals={cal:0,p:0,c:0,f:0};
+  meals.forEach(function(m){totals.cal+=+m.cal||0;totals.p+=+m.p||0;totals.c+=+m.c||0;totals.f+=+m.f||0;});
+  var target=f?f.cal:0,pct=target?Math.min(100,Math.round(totals.cal/target*100)):0;
+  var header='<section class="card"><h2>الأكل</h2><div class="seg food-tabs"><button type="button" data-act="foodtab" data-tab="log" aria-pressed="'+(tab==='log')+'">سجل أكلي</button><button type="button" data-act="foodtab" data-tab="calc" aria-pressed="'+(tab==='calc')+'">حاسبة احتياجي</button></div>';
+  if(tab==='calc'){
+    var p=S.profile,goals=[["gain","تضخيم نضيف (+250)"],["maintain","تثبيت"],["cut","تنشيف (−400)"]],acts=[[1.4,"حركة قليلة"],[1.55,"4 تمارين في الأسبوع وحركة عادية"],[1.7,"نشاط عالي أو شغل بدني"]];
+    $('app').innerHTML=header+'<h3>احتياجك اليومي التقريبي</h3><p class="sub">غيّر بياناتك ومستوى نشاطك، والاحتياج والماكروز هيتحدّثوا تلقائيًا.</p><div class="flds"><label class="fld">الوزن (kg)<input type="text" inputmode="decimal" id="p-w" value="'+(p.w||'')+'" placeholder="'+(latestAvg()?r1(latestAvg()):'72')+'"></label><label class="fld">الطول (cm)<input type="text" inputmode="numeric" id="p-h" value="'+(p.h||'')+'" placeholder="175"></label><label class="fld">السن<input type="text" inputmode="numeric" id="p-age" value="'+(p.age||'')+'" placeholder="22"></label><label class="fld">الهدف<select id="p-goal">'+goals.map(function(g){return '<option value="'+g[0]+'"'+(p.goal===g[0]?' selected':'')+'>'+g[1]+'</option>';}).join('')+'</select></label></div><label class="fld">مستوى النشاط<select id="p-act">'+acts.map(function(a){return '<option value="'+a[0]+'"'+(+p.act===a[0]?' selected':'')+'>'+a[1]+'</option>';}).join('')+'</select></label><div id="foodres" class="macro">'+foodResult()+'</div><button type="button" class="btn ghost" data-act="foodtab" data-tab="log">رجوع لسجل أكلي</button></section>';
+    return;
+  }
+  var summary='<div class="food-totals"><div class="food-cal"><b>'+totals.cal.toLocaleString('ar-EG')+'</b><span>سعرة مسجّلة'+(target?' من '+target.toLocaleString('ar-EG'):'')+'</span></div><div class="food-meter"><i style="width:'+pct+'%"></i></div><div class="food-macros"><span>بروتين <b>'+Math.round(totals.p)+' جم</b>'+(f?' / '+f.prot:'')+'</span><span>كارب <b>'+Math.round(totals.c)+' جم</b>'+(f?' / '+f.carb:'')+'</span><span>دهون <b>'+Math.round(totals.f)+' جم</b>'+(f?' / '+f.fat:'')+'</span></div>'+(f?'':'<button type="button" class="btn ghost" data-act="foodtab" data-tab="calc">احسب احتياجي مرة واحدة</button>')+'</div>';
+  var favhtml=fav.length?'<div class="fav-meals"><h3>وجباتك المحفوظة</h3>'+fav.map(function(m,i){return '<button type="button" class="btn ghost fav-btn" data-act="food-favorite" data-i="'+i+'">'+escFood(m.name)+' · '+m.cal+' سعرة</button>';}).join('')+'</div>':'';
+  var rows=meals.length?meals.map(function(m,i){return '<article class="meal-row">'+(m.photo?'<img class="meal-photo" src="'+m.photo+'" alt="صورة '+escFood(m.name)+'">':'')+'<div class="meal-info"><b>'+escFood(m.name)+'</b><span>'+escFood(m.portion||'')+' · '+m.cal+' سعرة</span><small>بروتين '+m.p+' جم · كارب '+m.c+' جم · دهون '+m.f+' جم</small></div><button type="button" class="btn ghost" data-act="food-del" data-i="'+i+'" aria-label="حذف الوجبة">حذف</button></article>';}).join(''):'<p class="empty">لسه ما سجلتش أكلك النهارده. سجّل وجباتك واحدة واحدة، وتقدر تحفظ المفضلة عشان تضيفها بسرعة بعد كده.</p>';
+  $('app').innerHTML=header+'<p class="sub">سجّل اللي أكلته؛ الأرقام بتتجمع لليوم ده على جهازك.</p>'+summary+favhtml+'<section class="card meal-form"><h3>إضافة وجبة</h3><div class="flds"><label class="fld">اسم الوجبة<input id="food-name" type="text" placeholder="مثال: فطار"></label><label class="fld">الكمية / الوصف<input id="food-portion" type="text" placeholder="مثال: 2 بيضة ورغيف"></label><label class="fld">السعرات<input id="food-cal" type="number" min="0" inputmode="numeric" placeholder="سعرة"></label><label class="fld">بروتين (جم)<input id="food-p" type="number" min="0" inputmode="decimal" placeholder="0"></label><label class="fld">كارب (جم)<input id="food-c" type="number" min="0" inputmode="decimal" placeholder="0"></label><label class="fld">دهون (جم)<input id="food-f" type="number" min="0" inputmode="decimal" placeholder="0"></label></div><label class="fld">صورة الوجبة (اختياري)<input id="food-photo" type="file" accept="image/*"></label><label class="chk2"><input id="food-fav" type="checkbox"> احفظها ضمن وجباتي المفضلة</label><button type="button" class="btn" data-act="food-save">سجّل الوجبة</button></section><section class="card"><h3>وجبات النهارده</h3>'+rows+'</section></section>';
+}
+
+/* شاشة الملخص */
+var shareCanvas=null, shareTimer=null;
+function drawShare(){
+  var W=1080,H=1920, c=document.createElement("canvas"); c.width=W; c.height=H;
+  var x=c.getContext("2d"), tk=todayKey(), ws=weekStartKey(tk);
+  var BG="#0F1214",SF="#181C1F",INK="#ECEFEA",MU="#9AA5AD",AC="#FF6B3F",OK="#4CC38A",LN="#2A3034";
+  var PAD=80, R=W-PAD;
+  function T(txt,px,py,font,col,al,dir){ x.direction=dir||"rtl"; x.font=font; x.fillStyle=col; x.textAlign=al||"right"; x.textBaseline="alphabetic"; x.fillText(txt,px,py); }
+  function rr(px,py,w,h,r,fill,stroke){ x.beginPath(); x.moveTo(px+r,py); x.arcTo(px+w,py,px+w,py+h,r); x.arcTo(px+w,py+h,px,py+h,r); x.arcTo(px,py+h,px,py,r); x.arcTo(px,py,px+w,py,r); x.closePath(); if(fill){ x.fillStyle=fill; x.fill(); } if(stroke){ x.strokeStyle=stroke; x.lineWidth=4; x.stroke(); } }
+  x.fillStyle=BG; x.fillRect(0,0,W,H);
+  var AR2="Cairo, Tahoma, sans-serif", DS="'Barlow Condensed', Cairo, sans-serif";
+  T("ملخص أسبوعي",R,150,"800 56px "+AR2,AC);
+  var rng=pk(ws).toLocaleDateString("ar-EG",{day:"numeric",month:"long"})+" – "+pk(addD(ws,6)).toLocaleDateString("ar-EG",{day:"numeric",month:"long"});
+  T(rng,R,218,"600 42px "+AR2,MU);
+  var done=weekTrainCount(ws);
+  T(done+"/4",R,640,"700 380px "+DS,INK,"right","ltr");
+  T("تمارين الأسبوع",R,720,"600 52px "+AR2,MU);
+  var tw=(W-2*PAD-6*14)/7;
+  for(var i=0;i<7;i++){
+    var k=addD(ws,i), d=DAYS[i], st=planDoneOn(k)?"done":(k<tk&&!d.rest&&firstSessionDate()&&k>=firstSessionDate()?"missed":"other");
+    var px=R-(i+1)*tw-i*14, py=800;
+    rr(px,py,tw,200,18,SF,st==="done"?OK:(st==="missed"?AC:LN));
+    T(d.wd,px+tw/2,py+60,"600 30px "+AR2,st==="other"?MU:INK,"center");
+    var mk=st==="done"?"✓":(st==="missed"?"✗":"–");
+    T(mk,px+tw/2,py+150,"700 70px "+AR2,st==="done"?OK:(st==="missed"?AC:MU),"center");
+  }
+  var w2=(W-2*PAD-24)/2;
+  var la=latestAvg(), ks=wKeys(), delta=null;
+  if(la!==null && ks.length){ var pv=avg7(addD(ks[ks.length-1],-7)); if(pv!==null) delta=la-pv; }
+  var stats=[["مجموعات الأسبوع",String(weekSets(ws))],["أرقام قياسية",String(weekPRs(ws))],["أيام متتالية",String(curStreak())]];
+  if(S.share.weight && la!==null) stats.push(["متوسط الوزن"+(delta!==null?" ("+(delta>0?"+":"")+r1(delta)+")":""),String(r1(la))]);
+  else stats.push(["إجمالي التمارين",String(S.sessions.filter(function(s){ var dd=dayOf(s.day); return dd && !dd.rest; }).length)]);
+  stats.forEach(function(s,i){
+    var col=i%2, row=Math.floor(i/2), px=R-(col+1)*w2-col*24, py=1090+row*(300+24);
+    rr(px,py,w2,300,24,SF,null);
+    T(s[0],px+w2-36,py+78,"600 40px "+AR2,MU);
+    T(s[1],px+w2-36,py+236,"700 150px "+DS,INK,"right","ltr");
+  });
+  var nm=(S.share.name||"").trim();
+  if(nm) T(nm,W/2,1790,"800 60px "+AR2,INK,"center");
+  T("كريم سامي · دفتر التمرين",W/2,nm?1840:1785,"700 38px "+AR2,MU,"center"); T("@kareem._.samy",W/2,1895,"500 30px "+AR2,AC,"center");
+  return c;
+}
+function paintShare(){
+  var el=$("shareimg"); if(!el) return;
+  var go=function(){ try{ shareCanvas=drawShare(); el.src=shareCanvas.toDataURL("image/png"); }catch(e){} };
+  try{
+    if(document.fonts && document.fonts.load){ Promise.all([document.fonts.load("800 40px Cairo"),document.fonts.load("600 40px Cairo"),document.fonts.load("700 40px 'Barlow Condensed'")]).then(go,go); }
+    else go();
+  }catch(e){ go(); }
+}
+var pendingRestore = null, restoreMsg = "";
+function restoreCard(){
+  var h = '<section class="card"><h2>استرجاع من ملف</h2><p class="sub">لو حصلت مشكلة، ارفع ملف البيانات اللي نزّلته قبل كده. الاسترجاع بيستبدل كل اللي في الدفتر دلوقتي.</p>';
+  if(pendingRestore){
+    var o = pendingRestore, nt = o.sessions.filter(function(x){ return !(dayOf(x.day) && dayOf(x.day).rest); }).length;
+    h += '<div class="banner note warn">الملف فيه '+nt+' تمرين، '+Object.keys(o.weights||{}).length+' وزن، '+(o.meas||[]).length+' قياس. هيتم استبدال كل بياناتك الحالية بيهم.</div>'+
+      '<div class="rowbtns"><button type="button" class="btn" data-act="restoreok">تأكيد الاسترجاع</button><button type="button" class="btn ghost" data-act="restorecancel">إلغاء</button></div>';
+  } else {
+    h += '<label class="fld">اختار ملف البيانات (.json)<input type="file" id="rfile" accept=".json,application/json" style="height:auto;padding:8px;direction:rtl"></label>'+
+      '<label class="fld">أو الصق محتوى الملف هنا<textarea id="rtext" rows="3" style="background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;font-family:var(--f-mono);font-size:.8rem;direction:ltr;padding:6px"></textarea></label>'+
+      '<div class="rowbtns"><button type="button" class="btn ghost" data-act="restoretext">اقرأ اللي لصقته</button></div>';
+  }
+  if(restoreMsg) h += '<p class="sub">'+restoreMsg+'</p>';
+  return h+'</section>';
+}
+function tryRestore(txt){
+  restoreMsg = ""; pendingRestore = null;
+  try{
+    var o = JSON.parse(txt);
+    if(!o || !Array.isArray(o.sessions)) throw 0;
+    o.sessions.forEach(function(x){ if(!x || !x.date || !x.day) throw 0; });
+    pendingRestore = o;
+  }catch(e){ restoreMsg = "الملف ده مش ملف بيانات الدفتر. اتأكد إنه الملف اللي نزّلته من تاب الملخص."; }
+  renderShare();
+}
+function renderShare(){
+  var bl=badgesList(), earned=bl.map(function(b,i){return {b:b,i:i};}).filter(function(x){return x.b.on;});
+  $( "app").innerHTML='<section class="card"><h2>ملخص أسبوعك كصورة</h2><p class="sub">مقاس ستوري جاهز للمشاركة. اسمك اختياري، وإظهار الوزن مقفول افتراضيًا.</p><img class="shareimg" id="shareimg" alt="معاينة ملخص الأسبوع" width="300" height="533"><label class="fld">اسمك أو الهاندل (اختياري)<input type="text" id="s-name" value="'+(S.share.name||"").replace(/"/g,"&quot;")+'" style="direction:rtl"></label><label class="chk2"><input type="checkbox" id="s-w"'+(S.share.weight?' checked':'')+'> أظهر وزني في الصورة (اختياري)</label><div class="rowbtns"><button type="button" class="btn" data-act="shareimg">شارك الملخص</button><button type="button" class="btn ghost" data-act="dlimg">نزّل الصورة</button></div><p class="sub">المشاركة بتفتح قائمة المشاركة في موبايلك، أو بتنزل الصورة لو القائمة مش متاحة.</p></section><section class="card"><h2>إنجازات تستاهل المشاركة</h2><p class="sub">اختار إنجازًا فتحته وشاركه كصورة منفصلة.</p>'+(earned.length?earned.map(function(x){return '<div class="achievement-row"><div><b>'+escFood(x.b.n)+'</b><small>'+escFood(x.b.d)+'</small></div><button type="button" class="btn ghost" data-act="sharebadge" data-i="'+x.i+'">شارك</button></div>';}).join(''):'<p class="empty">لما تفتح إنجاز، هيظهر هنا زر مشاركة خاص بيه.</p>')+'</section><section class="card"><h2>نسخة احتياطية</h2><p class="sub">بيانات الدفتر محفوظة على المتصفح ده. نزّل نسخة احتياطية لو هتغيّر جهازك.</p><div class="rowbtns"><button type="button" class="btn ghost" data-act="dljson">نزّل ملف البيانات</button></div></section>'+restoreCard();
+  paintShare();
+}
+function shareAchievement(b){
+ var c=document.createElement("canvas");c.width=1080;c.height=1920;var x=c.getContext("2d");
+ x.fillStyle="#101416";x.fillRect(0,0,1080,1920);x.fillStyle="#ff6b3f";x.font="700 64px Cairo, sans-serif";x.textAlign="center";x.direction="rtl";x.fillText("إنجاز جديد",540,270);
+ x.fillStyle="#20272a";x.beginPath();x.roundRect(90,430,900,760,44);x.fill();x.fillStyle="#f4f4f0";x.font="800 72px Cairo, sans-serif";x.fillText(b.n,540,750);x.fillStyle="#b0b8ba";x.font="500 42px Cairo, sans-serif";x.fillText(b.d,540,840);
+ x.fillStyle="#f4f4f0";x.font="700 48px Cairo, sans-serif";x.fillText("عاش على الاستمرار خطوة بخطوة",540,1370);x.fillStyle="#ff6b3f";x.font="700 42px Cairo, sans-serif";x.fillText("كريم سامي · @kareem._.samy",540,1725);
+ c.toBlob(function(blob){if(!blob){toast("حصلت مشكلة في الصورة");return;}var file=new File([blob],"انجاز-رياضي.png",{type:"image/png"});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title:"إنجازي الرياضي"}).catch(function(){});else saveFile(file.name,blob,"اتنزّلت صورة الإنجاز");},"image/png");
+}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-act]");if(!b)return;var act=b.getAttribute("data-act");if(act==="shareimg"){if(!shareCanvas){toast("استنى الصورة تجهز");return;}shareCanvas.toBlob(function(blob){if(!blob)return;var file=new File([blob],"ملخص-أسبوعي.png",{type:"image/png"});if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title:"ملخصي الرياضي"}).catch(function(){});else saveFile(file.name,blob,"اتنزّلت الصورة؛ تقدر تشاركها على الستوري");},"image/png");}else if(act==="sharebadge"){var bs=badgesList(),badge=bs[+b.getAttribute("data-i")];if(badge&&badge.on)shareAchievement(badge);}});
+function saveFile(name,data,okMsg){
+  try{var blob=data instanceof Blob?data:new Blob([data],{type:"application/octet-stream"});var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);toast(okMsg);}catch(e){toast("التنزيل مش متاح في المتصفح ده");}
+}
+
+/* الأحداث الجديدة */
+function saveWeight(v,k){
+  v=parseFloat(String(v).replace(",","."));
+  if(!(v>30 && v<250)){ toast("اكتب وزن صحيح بالكيلو"); return false; }
+  S.weights[k]=r1(v); persist(); toast("اتسجل وزنك"); return true;
+}
+document.addEventListener("click", function(ev){
+  var b=ev.target.closest("[data-act]"); if(!b) return;
+  var a=b.getAttribute("data-act");
+  if(a==="gotrain"){ dayIdx=+b.getAttribute("data-i"); S.prefs.day=dayIdx; persist(); view="train"; renderAll(); window.scrollTo(0,0); }
+  else if(a==="habit"){ var k=todayKey(), id=b.getAttribute("data-h"); S.habits[k]=S.habits[k]||{}; S.habits[k][id]=!S.habits[k][id]; persist(); renderAll(); }
+  else if(a==="prayer"){ var k=todayKey(), id=b.getAttribute("data-p"); S.prayers[k]=S.prayers[k]||{}; S.prayers[k][id]=!S.prayers[k][id]; persist(); renderAll(); }
+  else if(a==="qwsave"){ if(saveWeight($("qw").value,todayKey())) renderAll(); }
+  else if(a==="wsave"){ if(saveWeight($("wval").value,$("wdate").value||todayKey())) renderAll(); }
+  else if(a==="wdel"){ delete S.weights[b.getAttribute("data-k")]; persist(); renderAll(); }
+  else if(a==="wr"){ S.prefs.wr=+b.getAttribute("data-r"); persist(); renderAll(); }
+  else if(a==="msave"){
+    var e={date:$("m-date").value||todayKey()}, any=false;
+    ["arm","chest","waist","thigh","sh"].forEach(function(f){
+      var v=parseFloat(($("m-"+f).value||"").replace(",","."));
+      if(v>10 && v<250){ e[f]=r1(v); any=true; }
+    });
+    if(!any){ toast("اكتب قياس واحد على الأقل بالسنتيمتر"); return; }
+    S.meas=S.meas.filter(function(m){ return m.date!==e.date; }); S.meas.push(e);
+    S.meas.sort(function(x,y){ return x.date<y.date?-1:1; });
+    persist(); toast("اتسجلت القياسات"); renderAll();
+  }
+  else if(a==="mdel"){ var dd=b.getAttribute("data-d"); S.meas=S.meas.filter(function(m){ return m.date!==dd; }); persist(); renderAll(); }
+  
+  else if(a==="dlimg"){
+    if(!shareCanvas){ toast("استنى الصورة تجهز"); return; }
+    shareCanvas.toBlob(function(bl){ if(!bl){ toast("حصلت مشكلة في الصورة"); return; } saveFile("ملخص-الأسبوع-"+weekStartKey(todayKey())+".png",bl,"اتنزّلت الصورة"); },"image/png");
+  }
+  else if(a==="restoretext"){ var rt = $("rtext"); tryRestore(rt ? rt.value : ""); }
+  else if(a==="restorecancel"){ pendingRestore = null; restoreMsg = ""; renderShare(); }
+  else if(a==="restoreok"){
+    var o = pendingRestore; pendingRestore = null; restoreMsg = "اتسترجعت البيانات.";
+    o.sessions.sort(function(x,y){ return x.date<y.date?1:x.date>y.date?-1:(y.id||0)-(x.id||0); });
+    S = o; S.prefs = S.prefs || {day:0,rest:150}; S.prayers=S.prayers||{}; S.draft = S.draft || {}; defaults();
+    persist(); if(cloudDb){ clearTimeout(cloudTimer); cloudPush(true); }
+    renderAll(); toast("اتسترجعت البيانات");
+  }
+  else if(a==="dljson"){ saveFile("dafter-tamreen-"+todayKey()+".json",JSON.stringify(S,null,1),"اتنزّل الملف"); }
+});
+function smallMealPhoto(file){
+  return new Promise(function(resolve){if(!file||!file.type||file.type.indexOf('image/')!==0){resolve('');return;}var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement('canvas'),scale=Math.min(1,720/Math.max(im.width,im.height));c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.68));};im.onerror=function(){resolve('');};im.src=rd.result;};rd.onerror=function(){resolve('');};rd.readAsDataURL(file);});
+}
+document.addEventListener("click",function(ev){
+ var b=ev.target.closest("[data-act]");if(!b)return;var a=b.getAttribute("data-act");
+ if(a==="foodtab"){S.prefs.foodTab=b.getAttribute("data-tab");persist();renderFood();}
+ else if(a==="food-del"){var ms=todayMeals();ms.splice(+b.getAttribute("data-i"),1);persist();renderFood();}
+ else if(a==="food-favorite"){var m=S.food.favorites[+b.getAttribute("data-i")];if(!m)return;["name","portion","cal","p","c","f"].forEach(function(k){var el=$("food-"+k);if(el)el.value=m[k]||"";});var chk=$("food-fav");if(chk)chk.checked=true;window.scrollTo(0,document.body.scrollHeight);}
+ else if(a==="food-save"){var name=($("food-name").value||"").trim(),cal=+$("food-cal").value,p=+$("food-p").value||0,c=+$("food-c").value||0,ff=+$("food-f").value||0,photoFile=$("food-photo").files[0],meal={name:name,portion:($("food-portion").value||"").trim(),cal:cal,p:p,c:c,f:ff};if(!name||!(cal>0)){toast("اكتب اسم الوجبة والسعرات");return;}smallMealPhoto(photoFile).then(function(photo){meal.photo=photo;todayMeals().push(meal);if($("food-fav").checked){var fav={name:meal.name,portion:meal.portion,cal:meal.cal,p:meal.p,c:meal.c,f:meal.f};if(!S.food.favorites.some(function(q){return q.name===fav.name&&q.cal===fav.cal;}))S.food.favorites.push(fav);}persist();toast("اتسجلت الوجبة");renderFood();});}
+});
+document.addEventListener("change",function(ev){var t=ev.target;if(!t||!t.id)return;var id=t.id;if(id==="p-goal"){S.profile.goal=t.value;persist();foodUpdate();}else if(id==="p-act"){S.profile.act=+t.value;persist();foodUpdate();}});
+
+function foodUpdate(){ var el=$("foodres"); if(el) el.innerHTML=foodResult(); }
+document.addEventListener("input", function(ev){
+  var t=ev.target, id=t.id||"";
+  if(id==="p-w"||id==="p-h"||id==="p-age"){
+    var v=t.value.replace(",",".").replace(/[^0-9.]/g,""); if(id!=="p-w") v=v.replace(/\./g,""); if(v!==t.value) t.value=v;
+    S.profile[id.slice(2)]=v; persist(); foodUpdate();
+  } else if(id==="s-name"){ S.share.name=t.value; persist(); clearTimeout(shareTimer); shareTimer=setTimeout(paintShare,300); }
+});
+document.addEventListener("change", function(ev){
+  var t=ev.target, id=t.id||"";
+  if(id==="p-goal"){ S.profile.goal=t.value; persist(); foodUpdate(); }
+  else if(id==="p-act"){ S.profile.act=+t.value; persist(); foodUpdate(); }
+  else if(id==="exsel"){ S.prefs.ex=t.value; persist(); renderAll(); }
+  
+  else if(id==="rfile"){
+    var f = t.files && t.files[0]; if(!f) return;
+    var rd = new FileReader(); rd.onload = function(){ tryRestore(String(rd.result)); }; rd.onerror = function(){ restoreMsg = "ماقدرتش أقرأ الملف."; renderShare(); };
+    rd.readAsText(f);
+  }
+  else if(id==="s-w"){ S.share.weight=t.checked; persist(); paintShare(); }
+});
+
+$("today").textContent = new Date().toLocaleDateString("ar-EG",{weekday:"long",day:"numeric",month:"long"});
+renderAll();
+initCloud();
+})();
+</script>
+
+</body></html>
